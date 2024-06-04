@@ -1,0 +1,9 @@
+name: run pytests
+run-name: ${{ github.actor }} is running pytests
+on: [push]
+jobs:
+  run-pytests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pytest
