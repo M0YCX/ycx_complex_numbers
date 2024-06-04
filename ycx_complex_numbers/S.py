@@ -1,5 +1,6 @@
 from ycx_complex_numbers.complex import Complex
 
+
 class S(Complex):
     """S - An S (Scatter) parameter."""
 

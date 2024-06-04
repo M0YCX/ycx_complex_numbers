@@ -1,0 +1,14 @@
+[project]
+name = "ycx_complex_numbers"
+version = "0.1"
+authors = [
+    { name="Graham Bevan [M0YCX]" },
+]
+description = "A simple Python library for representing complex numbers, S/Y-Parameters and Z impedances - for Amateur Radio projects"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]

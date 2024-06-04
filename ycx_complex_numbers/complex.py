@@ -62,32 +62,3 @@ class Complex:
 
     def __eq__(self, other):
         return self.c == other.c
-
-# class S(Complex):
-#     """S - An S (Scatter) parameter."""
-
-#     symbol = "S"
-#     c = 0 + 0j
-
-#     def __init__(self, c=None):
-#         super().__init__(c)
-
-
-# class Y(Complex):
-#     """Y - A Y (Admittance) parameter."""
-
-#     symbol = "Y"
-#     c = 0 + 0j
-
-#     def __init__(self, c=None):
-#         super().__init__(c)
-
-
-# class Z(Complex):
-#     """Z - Z (Impedance)."""
-
-#     symbol = "Z"
-#     c = 0 + 0j
-
-#     def __init__(self, c=None):
-#         super().__init__(c)
