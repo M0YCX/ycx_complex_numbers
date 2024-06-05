@@ -12,7 +12,7 @@ class Complex(object):
         self._c = c
 
     def from_polar(self, mag, angle):
-        x = mag * np._cos(np.deg2rad(angle))
+        x = mag * np.cos(np.deg2rad(angle))
         y = mag * np.sin(np.deg2rad(angle))
         self._c = complex(x, y)
         return self
