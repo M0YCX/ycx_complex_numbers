@@ -3,62 +3,64 @@ import math
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
 
-
-class Complex:
+class Complex(object):
     """Complex - Complex number class."""
 
-    symbol = None
-    c = 0 + 0j
+    _symbol = None
 
     def __init__(self, c=None):
-        self.c = c
+        self._c = c
 
     def from_polar(self, mag, angle):
-        x = mag * np.cos(np.deg2rad(angle))
+        x = mag * np._cos(np.deg2rad(angle))
         y = mag * np.sin(np.deg2rad(angle))
-        self.c = complex(x, y)
+        self._c = complex(x, y)
         return self
 
     def __str__(self):
         p = self.as_polar()
-        return f"{self.symbol+':' if self.symbol else ''}{self.c:.5f} : [mag:{p['mag']:.5f} ∠{p['angle']:.5f}]"
+        return f"{self._symbol+':' if self._symbol else ''}{self._c:.5f} : [mag:{p['mag']:.5f} ∠{p['angle']:.5f}]"
 
     def __repr__(self):
         return str(self)
 
     def __abs__(self):
-        return abs(self.c)
+        return abs(self._c)
 
     def as_complex(self):
-        return self.c
+        return self._c
 
     def as_polar(self):
-        mag = abs(self.c)
-        angle = math.degrees(math.atan2(self.c.imag, self.c.real))
+        mag = abs(self._c)
+        angle = math.degrees(math.atan2(self._c.imag, self._c.real))
         return {"mag": mag, "angle": angle}
 
     def as_conjugate(self):
-        return Complex((self.c.real - 1j * self.c.imag))
+        return Complex((self._c.real - 1j * self._c.imag))
+
+    @property
+    def c(self):
+        return self._c
 
     @property
     def real(self):
-        return self.c.real
+        return self._c.real
 
     @property
     def imag(self):
-        return self.c.imag
+        return self._c.imag
 
     def __add__(self, other):
-        return Complex(self.c + other.c)
+        return Complex(self._c + other._c)
 
     def __sub__(self, other):
-        return Complex(self.c - other.c)
+        return Complex(self._c - other._c)
 
     def __mul__(self, other):
-        return Complex(self.c * other.c)
+        return Complex(self._c * other._c)
 
     def __truediv__(self, other):
-        return Complex(self.c / other.c)
+        return Complex(self._c / other._c)
 
     def __eq__(self, other):
-        return self.c == other.c
+        return self._c == other._c

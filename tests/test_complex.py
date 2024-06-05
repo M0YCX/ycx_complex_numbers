@@ -8,8 +8,17 @@ import pytest
 )
 def test_new_complex(test_input):
     c = test_input
+    assert c == test_input
     assert c.real == 50.0
     assert c.imag == 16.0
+
+def test_c_protected():
+    c = Complex(50 + 16j)
+    try:
+        c.c = 0+1j
+    except AttributeError as e:
+        print(str(e))
+        assert str(e) == "can't set attribute 'c'"
 
 
 @pytest.mark.parametrize(
@@ -173,6 +182,7 @@ def test_abs(test_input1):
 )
 def test_str(test_input1, test_re1):
     c = test_input1
+    print(type(c).__name__)
     assert re.match(test_re1, str(c))
 
 
