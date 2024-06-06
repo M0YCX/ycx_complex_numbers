@@ -50,6 +50,10 @@ class Complex(object):
     def imag(self):
         return self._c.imag
 
+    @property
+    def conjugate(self):
+        return Complex(np.conjugate(self._c))
+
     def __add__(self, other):
         return Complex(self._c + other._c)
 
