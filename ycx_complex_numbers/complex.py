@@ -57,14 +57,26 @@ class Complex(object):
     def __add__(self, other):
         return Complex(self._c + other._c)
 
+    def __radd__(self, other):
+        return Complex(other + self._c)
+
     def __sub__(self, other):
         return Complex(self._c - other._c)
+
+    def __rsub__(self, other):
+        return Complex(other - self._c)
 
     def __mul__(self, other):
         return Complex(self._c * other._c)
 
+    def __rmul__(self, other):
+        return Complex(other * self._c)
+
     def __truediv__(self, other):
         return Complex(self._c / other._c)
+
+    def __rtruediv__(self, other):
+        return Complex(other / self._c)
 
     def __eq__(self, other):
         return self._c == other._c

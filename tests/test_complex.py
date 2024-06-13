@@ -54,6 +54,17 @@ def test_add(test_input1, test_input2):
     assert c3.real == 60.0
     assert c3.imag == 21.0
 
+def test_int_radd():
+    res = 1 + Complex(50 + 16j)
+    print(res)
+    assert res.real == 51.0
+    assert res.imag == 16.0
+
+def test_float_radd():
+    res = 1.0 + Complex(50 + 16j)
+    print(res)
+    assert res.real == 51.0
+    assert res.imag == 16.0
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -88,6 +99,11 @@ def test_sub(test_input1, test_input2):
     assert c3.real == 40.0
     assert c3.imag == 11.0
 
+def test_int_rsub():
+    res = 1 - Complex(50 + 16j)
+    print(res)
+    assert res.real == -49.0
+    assert res.imag == -16.0
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -122,6 +138,11 @@ def test_mul(test_input1, test_input2):
     assert c3.real == 420.0
     assert c3.imag == 410.0
 
+def test_int_rmul():
+    res = 2 * Complex(50 + 16j)
+    print(res)
+    assert res.real == 100.0
+    assert res.imag == 32.0
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -156,6 +177,11 @@ def test_div(test_input1, test_input2):
     assert c3.real == 4.64
     assert c3.imag == -0.72
 
+def test_int_rdiv():
+    res = 1 / Complex(50 + 16j)
+    print(res)
+    assert res.real == 0.018142235123367198
+    assert res.imag == -0.005805515239477504
 
 @pytest.mark.parametrize(
     "test_input1",
