@@ -9,7 +9,10 @@ class Complex(object):
     _symbol = None
 
     def __init__(self, c=None):
-        self._c = c
+        if isinstance(c, Complex):
+            self._c = c._c
+        else:
+            self._c = c
 
     def from_polar(self, mag, angle):
         x = mag * np.cos(np.deg2rad(angle))

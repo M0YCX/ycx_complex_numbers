@@ -312,3 +312,9 @@ def test_Z_case_from_gamma():
 
     print(ZS)
     assert re.match(test_re1, str(ZS))
+
+def test_from_class():
+    cin = S(0.123+2.3j)
+    cout = ReflCoef(cin)
+    print(cout)
+    assert isinstance(cout, ReflCoef)
