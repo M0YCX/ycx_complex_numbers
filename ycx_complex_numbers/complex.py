@@ -36,7 +36,7 @@ class Complex(object):
         return {"mag": mag, "angle": angle}
 
     def as_conjugate(self):
-        return Complex((self._c.real - 1j * self._c.imag))
+        return self.__class__((self._c.real - 1j * self._c.imag))
 
     @property
     def c(self):
@@ -52,31 +52,49 @@ class Complex(object):
 
     @property
     def conjugate(self):
-        return Complex(np.conjugate(self._c))
+        return self.__class__(np.conjugate(self._c))
 
     def __add__(self, other):
-        return Complex(self._c + other._c)
+        if isinstance(other, Complex):
+            return self.__class__(self._c + other._c)
+        else:
+            return self.__class__(self._c + other)
 
     def __radd__(self, other):
-        return Complex(other + self._c)
+        return self.__add__(other)
 
     def __sub__(self, other):
-        return Complex(self._c - other._c)
+        if isinstance(other, Complex):
+            return self.__class__(self._c - other._c)
+        else:
+            return self.__class__(self._c - other)
 
     def __rsub__(self, other):
-        return Complex(other - self._c)
+        if isinstance(other, Complex):
+            return self.__class__(other._c - self._c)
+        else:
+            return self.__class__(other - self._c)
 
     def __mul__(self, other):
-        return Complex(self._c * other._c)
+        if isinstance(other, Complex):
+            return self.__class__(self._c * other._c)
+        else:
+            return self.__class__(self._c * other)
 
     def __rmul__(self, other):
-        return Complex(other * self._c)
+        return self.__class__(other * self._c)
 
     def __truediv__(self, other):
-        return Complex(self._c / other._c)
+        if isinstance(other, Complex):
+            return self.__class__(self._c / other._c)
+        else:
+            return self.__class__(self._c / other)
 
     def __rtruediv__(self, other):
-        return Complex(other / self._c)
+        if isinstance(other, Complex):
+            return self.__class__(other / self._c)
+        else:
+            return self.__class__(other / self._c)
 
     def __eq__(self, other):
         return self._c == other._c

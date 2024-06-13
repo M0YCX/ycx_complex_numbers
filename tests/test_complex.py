@@ -2,6 +2,7 @@ from ycx_complex_numbers import *
 import re
 import pytest
 
+CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
 
 @pytest.mark.parametrize(
     "test_input", [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j)]
@@ -200,10 +201,10 @@ def test_abs(test_input1):
 @pytest.mark.parametrize(
     "test_input1, test_re1",
     [
-        (Complex(3 + 4j), r"^\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (S(3 + 4j), r"^S:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (Y(3 + 4j), r"^Y:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (Z(3 + 4j), r"^Z:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
+        (Complex(3 + 4j), rf"^{CX_RE}"),
+        (S(3 + 4j), rf"^S:{CX_RE}"),
+        (Y(3 + 4j), rf"^Y:{CX_RE}"),
+        (Z(3 + 4j), rf"^Z:{CX_RE}"),
     ],
 )
 def test_str(test_input1, test_re1):
@@ -215,10 +216,10 @@ def test_str(test_input1, test_re1):
 @pytest.mark.parametrize(
     "test_input1, test_re1",
     [
-        (Complex(3 + 4j), r"^\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (S(3 + 4j), r"^S:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (Y(3 + 4j), r"^Y:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
-        (Z(3 + 4j), r"^Z:\d+\.?\d+\+\d+\.?\d+j : \[mag:.*\]$"),
+        (Complex(3 + 4j), rf"^{CX_RE}"),
+        (S(3 + 4j), rf"^S:{CX_RE}"),
+        (Y(3 + 4j), rf"^Y:{CX_RE}"),
+        (Z(3 + 4j), rf"^Z:{CX_RE}"),
     ],
 )
 def test_repr(test_input1, test_re1):
@@ -286,3 +287,14 @@ def test_as_complex(test_input1):
     cpx = c.as_complex()
     assert cpx.real == 3.0
     assert cpx.imag == 4.0
+
+def test_Z_case_from_gamma():
+    test_re1 = rf"^Z:{CX_RE}"
+    print(test_re1)
+    Z0 = Z(50+0j)
+    GS = Complex(0.672-17j)
+
+    ZS = Z0 * (1+GS)
+
+    print(ZS)
+    assert re.match(test_re1, str(ZS))
