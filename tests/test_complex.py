@@ -5,7 +5,7 @@ import pytest
 CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
 
 @pytest.mark.parametrize(
-    "test_input", [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j)]
+    "test_input", [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j), ReflCoef(50 + 16j)]
 )
 def test_new_complex(test_input):
     c = test_input
@@ -29,6 +29,7 @@ def test_c_protected():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_iadd(test_input1, test_input2):
@@ -46,6 +47,7 @@ def test_iadd(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_add(test_input1, test_input2):
@@ -74,6 +76,7 @@ def test_float_radd():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_isub(test_input1, test_input2):
@@ -91,6 +94,7 @@ def test_isub(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_sub(test_input1, test_input2):
@@ -113,6 +117,7 @@ def test_int_rsub():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_imul(test_input1, test_input2):
@@ -130,6 +135,7 @@ def test_imul(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_mul(test_input1, test_input2):
@@ -152,6 +158,7 @@ def test_int_rmul():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_idiv(test_input1, test_input2):
@@ -169,6 +176,7 @@ def test_idiv(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
 def test_div(test_input1, test_input2):
@@ -205,6 +213,7 @@ def test_abs(test_input1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
+        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}")
     ],
 )
 def test_str(test_input1, test_re1):
@@ -220,6 +229,7 @@ def test_str(test_input1, test_re1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
+        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}")
     ],
 )
 def test_repr(test_input1, test_re1):
@@ -234,6 +244,7 @@ def test_repr(test_input1, test_re1):
         S(3 + 4j),
         Y(3 + 4j),
         Z(3 + 4j),
+        ReflCoef(3 + 4j)
     ],
 )
 def test_eq(test_input1):
@@ -249,6 +260,7 @@ def test_eq(test_input1):
         (S(3 + 4j), S(3 + 5j)),
         (Y(3 + 4j), Y(3 + 5j)),
         (Z(3 + 4j), Z(3 + 5j)),
+        (ReflCoef(3 + 4j), ReflCoef(3 + 5j))
     ],
 )
 def test_ne(test_input1, test_input2):
@@ -264,6 +276,7 @@ def test_ne(test_input1, test_input2):
         S(3 + 4j),
         Y(3 + 4j),
         Z(3 + 4j),
+        ReflCoef(3 + 4j)
     ],
 )
 def test_as_polar(test_input1):
@@ -280,6 +293,7 @@ def test_as_polar(test_input1):
         S(3 + 4j),
         Y(3 + 4j),
         Z(3 + 4j),
+        ReflCoef(3 + 4j)
     ],
 )
 def test_as_complex(test_input1):
