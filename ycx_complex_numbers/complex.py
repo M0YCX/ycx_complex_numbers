@@ -20,14 +20,13 @@ class Complex(object):
         self._c = complex(x, y)
         return self
 
-    def _to_str(self, fmt=".5f"):
+    def _to_str(self, fmt=""):
+        if fmt == "":
+            fmt = ".5f"
         p = self.as_polar()
-        # return f"{self._symbol+':' if self._symbol else ''}{self._c:.5f} : [mag:{p['mag']:.5f} ∠{p['angle']:.5f}]"
         return f"{self._symbol+':' if self._symbol else ''}" + format(self._c, fmt) + " : [mag:" + format(p['mag'], fmt) + "} ∠" + format(p['angle'], fmt) + "]"
 
     def __str__(self):
-        # p = self.as_polar()
-        # return f"{self._symbol+':' if self._symbol else ''}{self._c:.5f} : [mag:{p['mag']:.5f} ∠{p['angle']:.5f}]"
         return self._to_str()
 
     def __repr__(self):

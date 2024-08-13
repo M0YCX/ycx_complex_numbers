@@ -323,3 +323,7 @@ def test_format():
     cin = S(0.123456+2.333333j)
     cin_f = f"{cin:.9f}"
     assert cin_f == "S:0.123456000+2.333333000j : [mag:2.336596729} ∠86.971320337]"
+
+    cin_f_def = f"{cin}"
+    print(cin_f_def)
+    assert cin_f_def == "S:0.12346+2.33333j : [mag:2.33660} ∠86.97132]"
