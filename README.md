@@ -1,3 +1,5 @@
+[![run pytests](https://github.com/M0YCX/ycx_complex_numbers/actions/workflows/run-tests.yml/badge.svg)](https://github.com/M0YCX/ycx_complex_numbers/actions/workflows/run-tests.yml)
+
 # M0YCX Complex Numbers Library
 
 To make representing complex numbers both in complex and polar
