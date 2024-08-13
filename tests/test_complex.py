@@ -19,7 +19,7 @@ def test_c_protected():
         c.c = 0+1j
     except AttributeError as e:
         print(str(e))
-        assert str(e) == "can't set attribute 'c'"
+        assert str(e) in ["can't set attribute 'c'", "property 'c' of 'Complex' object has no setter"]
 
 
 @pytest.mark.parametrize(
@@ -318,3 +318,8 @@ def test_from_class():
     cout = ReflCoef(cin)
     print(cout)
     assert isinstance(cout, ReflCoef)
+
+def test_format():
+    cin = S(0.123456+2.333333j)
+    cin_f = f"{cin:.9f}"
+    assert cin_f == "S:0.123456000+2.333333000j : [mag:2.336596729} ∠86.971320337]"
