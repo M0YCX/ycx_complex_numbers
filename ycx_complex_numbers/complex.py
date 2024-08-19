@@ -24,7 +24,7 @@ class Complex(object):
         if fmt == "":
             fmt = ".5f"
         p = self.as_polar()
-        return f"{self._symbol+':' if self._symbol else ''}" + format(self._c, fmt) + " : [mag:" + format(p['mag'], fmt) + "} ∠" + format(p['angle'], fmt) + "]"
+        return f"{self._symbol+':' if self._symbol else ''}" + format(self._c, fmt) + " : [mag:" + format(p['mag'], fmt) + " ∠" + format(p['angle'], fmt) + "]"
 
     def __str__(self):
         return self._to_str()
