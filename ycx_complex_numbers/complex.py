@@ -128,7 +128,7 @@ class Net(object):
         self._c22 = c22 if isinstance(c22, Complex) else Complex(c22)
 
     def _to_str(self, fmt=""):
-        return f"[\n  {self._c11.symbol}11:{self._c11},\n  12:{self._c12},\n  21:{self._c21},\n  22:{self._c22}\n]"
+        return f"[\n  {self._c11.symbol}11:{self._c11},\n  {self._c12.symbol}12:{self._c12},\n  {self._c21.symbol}21:{self._c21},\n  {self._c22.symbol}22:{self._c22}\n]"
 
     def __str__(self):
         return self._to_str()
