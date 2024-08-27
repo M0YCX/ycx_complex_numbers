@@ -1,4 +1,5 @@
 from ycx_complex_numbers.complex import Complex, Net
+from ycx_complex_numbers.Y import NetY
 
 
 class S(Complex):
