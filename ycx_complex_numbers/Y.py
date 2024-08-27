@@ -39,11 +39,14 @@ class NetY(Net):
             z22=self.y11 / self.determinant,
         )
 
-    def in_out(self, ys, yl):
+    def in_out(self, ys=None, yl=None):
         """return the input and output admittance for this Y matrix and given source and load admittances"""
         ys = Y(ys)
         yl = Y(yl)
         return {
             "Yin": self.y11 - (self.y12 * self.y21) / (yl + self.y22),
             "Yout": self.y22 - (self.y12 * self.y21) / (ys + self.y11),
+            "Y": self,
+            "ys": ys,
+            "yl": yl,
         }
