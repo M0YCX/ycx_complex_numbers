@@ -387,5 +387,5 @@ def test_NetY_in_out():
     assert "Yin" in yin_out
     assert "Yout" in yin_out
 
-    assert str(yin_out["Yin"]) == '0.01300+0.00201j : [mag:0.01315 ∠8.77662]'
-    assert str(yin_out["Yout"]) == '0.00110+0.00015j : [mag:0.00111 ∠7.78351]'
+    assert str(yin_out["Yin"]) == 'Y:0.01300+0.00201j : [mag:0.01315 ∠8.77662]'
+    assert str(yin_out["Yout"]) == 'Y:0.00110+0.00015j : [mag:0.00111 ∠7.78351]'

@@ -13,7 +13,7 @@ class Y(Complex):
 
 class NetY(Net):
     def __init__(self, y11=None, y12=None, y21=None, y22=None):
-        super().__init__(c11=y11, c12=y12, c21=y21, c22=y22)
+        super().__init__(c11=Y(y11), c12=Y(y12), c21=Y(y21), c22=Y(y22))
 
     @property
     def y11(self):
@@ -41,6 +41,8 @@ class NetY(Net):
 
     def in_out(self, ys, yl):
         """return the input and output admittance for this Y matrix and given source and load admittances"""
+        ys = Y(ys)
+        yl = Y(yl)
         return {
             "Yin": self.y11 - (self.y12 * self.y21) / (yl + self.y22),
             "Yout": self.y22 - (self.y12 * self.y21) / (ys + self.y11),
