@@ -4,8 +4,10 @@ import pytest
 
 CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
 
+
 @pytest.mark.parametrize(
-    "test_input", [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j), ReflCoef(50 + 16j)]
+    "test_input",
+    [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j), ReflCoef(50 + 16j)],
 )
 def test_new_complex(test_input):
     c = test_input
@@ -13,13 +15,17 @@ def test_new_complex(test_input):
     assert c.real == 50.0
     assert c.imag == 16.0
 
+
 def test_c_protected():
     c = Complex(50 + 16j)
     try:
-        c.c = 0+1j
+        c.c = 0 + 1j
     except AttributeError as e:
         print(str(e))
-        assert str(e) in ["can't set attribute 'c'", "property 'c' of 'Complex' object has no setter"]
+        assert str(e) in [
+            "can't set attribute 'c'",
+            "property 'c' of 'Complex' object has no setter",
+        ]
 
 
 @pytest.mark.parametrize(
@@ -57,17 +63,20 @@ def test_add(test_input1, test_input2):
     assert c3.real == 60.0
     assert c3.imag == 21.0
 
+
 def test_int_radd():
     res = 1 + Complex(50 + 16j)
     print(res)
     assert res.real == 51.0
     assert res.imag == 16.0
 
+
 def test_float_radd():
     res = 1.0 + Complex(50 + 16j)
     print(res)
     assert res.real == 51.0
     assert res.imag == 16.0
+
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -104,11 +113,13 @@ def test_sub(test_input1, test_input2):
     assert c3.real == 40.0
     assert c3.imag == 11.0
 
+
 def test_int_rsub():
     res = 1 - Complex(50 + 16j)
     print(res)
     assert res.real == -49.0
     assert res.imag == -16.0
+
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -145,11 +156,13 @@ def test_mul(test_input1, test_input2):
     assert c3.real == 420.0
     assert c3.imag == 410.0
 
+
 def test_int_rmul():
     res = 2 * Complex(50 + 16j)
     print(res)
     assert res.real == 100.0
     assert res.imag == 32.0
+
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -186,11 +199,13 @@ def test_div(test_input1, test_input2):
     assert c3.real == 4.64
     assert c3.imag == -0.72
 
+
 def test_int_rdiv():
     res = 1 / Complex(50 + 16j)
     print(res)
     assert res.real == 0.018142235123367198
     assert res.imag == -0.005805515239477504
+
 
 @pytest.mark.parametrize(
     "test_input1",
@@ -213,7 +228,7 @@ def test_abs(test_input1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
-        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}")
+        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
 def test_str(test_input1, test_re1):
@@ -229,7 +244,7 @@ def test_str(test_input1, test_re1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
-        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}")
+        (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
 def test_repr(test_input1, test_re1):
@@ -239,13 +254,7 @@ def test_repr(test_input1, test_re1):
 
 @pytest.mark.parametrize(
     "test_input1",
-    [
-        Complex(3 + 4j),
-        S(3 + 4j),
-        Y(3 + 4j),
-        Z(3 + 4j),
-        ReflCoef(3 + 4j)
-    ],
+    [Complex(3 + 4j), S(3 + 4j), Y(3 + 4j), Z(3 + 4j), ReflCoef(3 + 4j)],
 )
 def test_eq(test_input1):
     c1 = test_input1
@@ -260,7 +269,7 @@ def test_eq(test_input1):
         (S(3 + 4j), S(3 + 5j)),
         (Y(3 + 4j), Y(3 + 5j)),
         (Z(3 + 4j), Z(3 + 5j)),
-        (ReflCoef(3 + 4j), ReflCoef(3 + 5j))
+        (ReflCoef(3 + 4j), ReflCoef(3 + 5j)),
     ],
 )
 def test_ne(test_input1, test_input2):
@@ -271,13 +280,7 @@ def test_ne(test_input1, test_input2):
 
 @pytest.mark.parametrize(
     "test_input1",
-    [
-        Complex(3 + 4j),
-        S(3 + 4j),
-        Y(3 + 4j),
-        Z(3 + 4j),
-        ReflCoef(3 + 4j)
-    ],
+    [Complex(3 + 4j), S(3 + 4j), Y(3 + 4j), Z(3 + 4j), ReflCoef(3 + 4j)],
 )
 def test_as_polar(test_input1):
     c = test_input1
@@ -288,13 +291,7 @@ def test_as_polar(test_input1):
 
 @pytest.mark.parametrize(
     "test_input1",
-    [
-        Complex(3 + 4j),
-        S(3 + 4j),
-        Y(3 + 4j),
-        Z(3 + 4j),
-        ReflCoef(3 + 4j)
-    ],
+    [Complex(3 + 4j), S(3 + 4j), Y(3 + 4j), Z(3 + 4j), ReflCoef(3 + 4j)],
 )
 def test_as_complex(test_input1):
     c = test_input1
@@ -302,28 +299,93 @@ def test_as_complex(test_input1):
     assert cpx.real == 3.0
     assert cpx.imag == 4.0
 
+
 def test_Z_case_from_gamma():
     test_re1 = rf"^Z:{CX_RE}"
     print(test_re1)
-    Z0 = Z(50+0j)
-    GS = Complex(0.672-17j)
+    Z0 = Z(50 + 0j)
+    GS = Complex(0.672 - 17j)
 
-    ZS = Z0 * (1+GS)
+    ZS = Z0 * (1 + GS)
 
     print(ZS)
     assert re.match(test_re1, str(ZS))
 
+
 def test_from_class():
-    cin = S(0.123+2.3j)
+    cin = S(0.123 + 2.3j)
     cout = ReflCoef(cin)
     print(cout)
     assert isinstance(cout, ReflCoef)
 
+
 def test_format():
-    cin = S(0.123456+2.333333j)
+    cin = S(0.123456 + 2.333333j)
     cin_f = f"{cin:.9f}"
     assert cin_f == "S:0.123456000+2.333333000j : [mag:2.336596729 ∠86.971320337]"
 
     cin_f_def = f"{cin}"
     print(cin_f_def)
     assert cin_f_def == "S:0.12346+2.33333j : [mag:2.33660 ∠86.97132]"
+
+
+def test_Net():
+    n = Net(1 + 0j, 2 + 0j, 3, 4)
+    assert n.c11 == (1 + 0j)
+    assert n.c12 == (2 + 0j)
+    assert n.c21 == (3 + 0j)
+    assert n.c22 == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+def test_NetY():
+    n = NetY(1 + 0j, 2 + 0j, 3, 4)
+    assert n.y11 == (1 + 0j)
+    assert n.y12 == (2 + 0j)
+    assert n.y21 == (3 + 0j)
+    assert n.y22 == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+def test_NetZ():
+    n = NetZ(1 + 0j, 2 + 0j, 3, 4)
+    assert n.z11 == (1 + 0j)
+    assert n.z12 == (2 + 0j)
+    assert n.z21 == (3 + 0j)
+    assert n.z22 == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+def test_NetS():
+    n = NetS(1 + 0j, 2 + 0j, 3, 4)
+    assert n.s11 == (1 + 0j)
+    assert n.s12 == (2 + 0j)
+    assert n.s21 == (3 + 0j)
+    assert n.s22 == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+# TODO: test_NetY_to_Z
+
+
+def test_NetY_in_out():
+    y11 = 13 * 10**-3 + 2j * 10**-3
+    y12 = 0 + 0.001j * 10**-3
+    y21 = -12 * 10**-3 + 0.1j * 10**-3
+    y22 = 1.1 * 10**-3 + 0.15j * 10**-3
+
+    n = NetY(y11=y11, y12=y12, y21=y21, y22=y22)
+    YS = 1/(50 + 0j)
+    YL = 1/(1800 + 0j)
+
+    yin_out = n.in_out(ys=YS, yl=YL)
+
+    assert "Yin" in yin_out
+    assert "Yout" in yin_out
+
+    assert str(yin_out["Yin"]) == '0.01300+0.00201j : [mag:0.01315 ∠8.77662]'
+    assert str(yin_out["Yout"]) == '0.00110+0.00015j : [mag:0.00111 ∠7.78351]'

@@ -1,5 +1,5 @@
-from .complex import Complex
-from .S import S
-from .Y import Y
-from .Z import Z
+from .complex import Complex, Net
+from .S import S, NetS
+from .Y import Y, NetY
+from .Z import Z, NetZ
 from .ReflCoef import *

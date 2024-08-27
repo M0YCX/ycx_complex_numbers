@@ -13,6 +13,7 @@ plugins:
 runtimes:
   enabled:
     - python@3.10.8
+    - python@3.12.3
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   enabled:

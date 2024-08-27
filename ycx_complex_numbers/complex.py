@@ -11,8 +11,10 @@ class Complex(object):
     def __init__(self, c=None):
         if isinstance(c, Complex):
             self._c = c._c
-        else:
+        elif isinstance(c, complex):
             self._c = c
+        else:
+            self._c = c + 0j
 
     def from_polar(self, mag, angle):
         x = mag * np.cos(np.deg2rad(angle))
@@ -48,6 +50,10 @@ class Complex(object):
 
     def as_conjugate(self):
         return self.__class__((self._c.real - 1j * self._c.imag))
+
+    @property
+    def symbol(self):
+        return self._symbol if self._symbol is not None else ''
 
     @property
     def c(self):
@@ -108,4 +114,41 @@ class Complex(object):
             return self.__class__(other / self._c)
 
     def __eq__(self, other):
-        return self._c == other._c
+        if isinstance(other, Complex):
+            return self._c == other._c
+        else:
+            return self._c == other
+
+class Net(object):
+    """2-port network of complex numbers"""
+    def __init__(self, c11=None, c12=None, c21=None, c22=None):
+        self._c11 = c11 if isinstance(c11, Complex) else Complex(c11)
+        self._c12 = c12 if isinstance(c12, Complex) else Complex(c12)
+        self._c21 = c21 if isinstance(c21, Complex) else Complex(c21)
+        self._c22 = c22 if isinstance(c22, Complex) else Complex(c22)
+
+    def _to_str(self, fmt=""):
+        return f"[\n  {self._c11.symbol}11:{self._c11},\n  12:{self._c12},\n  21:{self._c21},\n  22:{self._c22}\n]"
+
+    def __str__(self):
+        return self._to_str()
+
+    def __repr__(self):
+        return str(self)
+
+    @property
+    def c11(self):
+        return self._c11
+    @property
+    def c12(self):
+        return self._c12
+    @property
+    def c21(self):
+        return self._c21
+    @property
+    def c22(self):
+        return self._c22
+
+    @property
+    def determinant(self):
+        return self._c11 * self._c22 - self._c12 * self._c21
