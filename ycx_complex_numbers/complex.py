@@ -9,7 +9,9 @@ class Complex(object):
     _symbol = None
 
     def __init__(self, c=None):
-        if isinstance(c, Complex):
+        if c is None:
+            self._c = c
+        elif isinstance(c, Complex):
             self._c = c._c
         elif isinstance(c, complex):
             self._c = c
@@ -80,6 +82,9 @@ class Complex(object):
     def __radd__(self, other):
         return self.__add__(other)
 
+    def __neg__(self):
+        return self.__class__(- self._c)
+
     def __sub__(self, other):
         if isinstance(other, Complex):
             return self.__class__(self._c - other._c)
@@ -128,7 +133,7 @@ class Net(object):
         self._c22 = c22 if isinstance(c22, Complex) else Complex(c22)
 
     def _to_str(self, fmt=""):
-        return f"[\n  {self._c11.symbol}11:{self._c11},\n  {self._c12.symbol}12:{self._c12},\n  {self._c21.symbol}21:{self._c21},\n  {self._c22.symbol}22:{self._c22}\n]"
+        return f"[\n  {self._c11.symbol.lower()}11:{self._c11},\n  {self._c12.symbol.lower()}12:{self._c12},\n  {self._c21.symbol.lower()}21:{self._c21},\n  {self._c22.symbol.lower()}22:{self._c22}\n]"
 
     def __str__(self):
         return self._to_str()

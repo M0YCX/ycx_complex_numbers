@@ -4,10 +4,29 @@ import pytest
 
 CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
 
+@pytest.mark.parametrize(
+    "test_input",
+    [
+        (0.4, 280),
+    ],
+)
+def test_new_from_polar(test_input):
+    for o in (Complex, S, Z, T, H, Y):
+        c = o().from_polar(test_input[0], test_input[1])
+        assert c.real == 0.069459271066772
+        assert c.imag == -0.3939231012048833
 
 @pytest.mark.parametrize(
     "test_input",
-    [Complex(50 + 16j), S(50 + 16j), Y(50 + 16j), Z(50 + 16j), ReflCoef(50 + 16j)],
+    [
+        Complex(50 + 16j),
+        S(50 + 16j),
+        Y(50 + 16j),
+        Z(50 + 16j),
+        H(50 + 16j),
+        T(50 + 16j),
+        ReflCoef(50 + 16j),
+    ],
 )
 def test_new_complex(test_input):
     c = test_input
@@ -35,6 +54,8 @@ def test_c_protected():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -53,6 +74,8 @@ def test_iadd(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -79,12 +102,33 @@ def test_float_radd():
 
 
 @pytest.mark.parametrize(
+    "test_input1",
+    [
+        Complex(50 + 16j),
+        S(50 + 16j),
+        Y(50 + 16j),
+        Z(50 + 16j),
+        H(50 + 16j),
+        T(50 + 16j),
+        ReflCoef(50 + 16j),
+    ],
+)
+def test_neg(test_input1):
+    c1 = test_input1
+    cres = -c1
+    assert cres.real == -50.0
+    assert cres.imag == -16.0
+
+
+@pytest.mark.parametrize(
     "test_input1, test_input2",
     [
         (Complex(50 + 16j), Complex(10 + 5j)),
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -103,6 +147,8 @@ def test_isub(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -128,6 +174,8 @@ def test_int_rsub():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -146,6 +194,8 @@ def test_imul(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -171,6 +221,8 @@ def test_int_rmul():
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -189,6 +241,8 @@ def test_idiv(test_input1, test_input2):
         (S(50 + 16j), S(10 + 5j)),
         (Y(50 + 16j), Y(10 + 5j)),
         (Z(50 + 16j), Z(10 + 5j)),
+        (H(50 + 16j), H(10 + 5j)),
+        (T(50 + 16j), T(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -228,6 +282,8 @@ def test_abs(test_input1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
+        (H(3 + 4j), rf"^H:{CX_RE}"),
+        (T(3 + 4j), rf"^T:{CX_RE}"),
         (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
@@ -244,6 +300,8 @@ def test_str(test_input1, test_re1):
         (S(3 + 4j), rf"^S:{CX_RE}"),
         (Y(3 + 4j), rf"^Y:{CX_RE}"),
         (Z(3 + 4j), rf"^Z:{CX_RE}"),
+        (H(3 + 4j), rf"^H:{CX_RE}"),
+        (T(3 + 4j), rf"^T:{CX_RE}"),
         (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
@@ -254,7 +312,15 @@ def test_repr(test_input1, test_re1):
 
 @pytest.mark.parametrize(
     "test_input1",
-    [Complex(3 + 4j), S(3 + 4j), Y(3 + 4j), Z(3 + 4j), ReflCoef(3 + 4j)],
+    [
+        Complex(3 + 4j),
+        S(3 + 4j),
+        Y(3 + 4j),
+        Z(3 + 4j),
+        H(3 + 4j),
+        T(3 + 4j),
+        ReflCoef(3 + 4j),
+    ],
 )
 def test_eq(test_input1):
     c1 = test_input1
@@ -269,6 +335,8 @@ def test_eq(test_input1):
         (S(3 + 4j), S(3 + 5j)),
         (Y(3 + 4j), Y(3 + 5j)),
         (Z(3 + 4j), Z(3 + 5j)),
+        (H(3 + 4j), H(3 + 5j)),
+        (T(3 + 4j), T(3 + 5j)),
         (ReflCoef(3 + 4j), ReflCoef(3 + 5j)),
     ],
 )
@@ -280,7 +348,15 @@ def test_ne(test_input1, test_input2):
 
 @pytest.mark.parametrize(
     "test_input1",
-    [Complex(3 + 4j), S(3 + 4j), Y(3 + 4j), Z(3 + 4j), ReflCoef(3 + 4j)],
+    [
+        Complex(3 + 4j),
+        S(3 + 4j),
+        Y(3 + 4j),
+        Z(3 + 4j),
+        H(3 + 4j),
+        T(3 + 4j),
+        ReflCoef(3 + 4j),
+    ],
 )
 def test_as_polar(test_input1):
     c = test_input1
@@ -369,7 +445,44 @@ def test_NetS():
     assert n.determinant == (-2 + 0j)
 
 
-# TODO: test_NetY_to_Z
+def test_NetH():
+    n = NetH(1 + 0j, 2 + 0j, 3, 4)
+    assert n.h11 == (1 + 0j)
+    assert n.h12 == (2 + 0j)
+    assert n.h21 == (3 + 0j)
+    assert n.h22 == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+def test_NetT():
+    n = NetT(1 + 0j, 2 + 0j, 3, 4)
+    assert n.A == (1 + 0j)
+    assert n.B == (2 + 0j)
+    assert n.C == (3 + 0j)
+    assert n.D == (4 + 0j)
+
+    assert n.determinant == (-2 + 0j)
+
+
+def test_NetY_to_ZTHS():
+    y11 = 13 * 10**-3 + 2j * 10**-3
+    y12 = 0 + 0.001j * 10**-3
+    y21 = -12 * 10**-3 + 0.1j * 10**-3
+    y22 = 1.1 * 10**-3 + 0.15j * 10**-3
+
+    n = NetY(y11=y11, y12=y12, y21=y21, y22=y22)
+    z = n.to_Z()
+    assert isinstance(z, NetZ)
+
+    t = n.to_T()
+    assert isinstance(t, NetT)
+
+    h = n.to_H()
+    assert isinstance(h, NetH)
+
+    s = n.to_S()
+    assert isinstance(s, NetS)
 
 
 def test_NetY_in_out():
@@ -379,13 +492,13 @@ def test_NetY_in_out():
     y22 = 1.1 * 10**-3 + 0.15j * 10**-3
 
     n = NetY(y11=y11, y12=y12, y21=y21, y22=y22)
-    YS = 1/(50 + 0j)
-    YL = 1/(1800 + 0j)
+    YS = 1 / (50 + 0j)
+    YL = 1 / (1800 + 0j)
 
     yin_out = n.in_out(ys=YS, yl=YL)
 
     assert "Yin" in yin_out
     assert "Yout" in yin_out
 
-    assert str(yin_out["Yin"]) == 'Y:0.01300+0.00201j : [mag:0.01315 ∠8.77662]'
-    assert str(yin_out["Yout"]) == 'Y:0.00110+0.00015j : [mag:0.00111 ∠7.78351]'
+    assert str(yin_out["Yin"]) == "Y:0.01300+0.00201j : [mag:0.01315 ∠8.77662]"
+    assert str(yin_out["Yout"]) == "Y:0.00110+0.00015j : [mag:0.00111 ∠7.78351]"

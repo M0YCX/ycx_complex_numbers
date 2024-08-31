@@ -11,7 +11,7 @@ class Z(Complex):
 
 class NetZ(Net):
     def __init__(self, z11=None, z12=None, z21=None, z22=None):
-        super().__init__(c11=z11, c12=z12, c21=z21, c22=z22)
+        super().__init__(c11=Z(z11), c12=Z(z12), c21=Z(z21), c22=Z(z22))
 
     @property
     def z11(self):
