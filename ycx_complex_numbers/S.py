@@ -13,7 +13,7 @@ class S(Complex):
 
 class NetS(Net):
     def __init__(self, s11=None, s12=None, s21=None, s22=None):
-        super().__init__(c11=s11, c12=s12, c21=s21, c22=s22)
+        super().__init__(c11=S(s11), c12=S(s12), c21=S(s21), c22=S(s22))
 
     @property
     def s11(self):
