@@ -59,15 +59,19 @@ class NetY(Net):
             h22=self.determinant / self.y11,
         )
 
-    def to_S(self):
+    def to_S(self, Z0=50+0j):
+        yi = self.y11 * Z0
+        yr = self.y12 * Z0
+        yf = self.y21 * Z0
+        yo = self.y22 * Z0
         return cn.NetS(
-            s11=((1 - self.y11) * (1 + self.y22) + self.y12 * self.y21)
-            / ((1 - self.y11) * (1 + self.y22) - self.y12 * self.y21),
-            s12=(-2 * self.y12)
-            / ((1 + self.y11) * (1 + self.y22) - self.y12 * self.y21),
-            s21=(-2 * self.y21) / (1 + self.y11) * (1 + self.y22) - self.y12 * self.y21,
-            s22=((1 + self.y11) * (1 - self.y22) + self.y12 * self.y21)
-            / ((1 + self.y11) * (1 + self.y22) - self.y12 * self.y21),
+            s11=((1 - yi) * (1 + yo) + yr * yf)
+            / ((1 + yi) * (1 + yo) - yr * yf),
+            s12=(-2 * yr)
+            / ((1 + yi) * (1 + yo) - yr * yf),
+            s21=(-2 * yf) / ((1 + yi) * (1 + yo) - yr * yf),
+            s22=((1 + yi) * (1 - yo) + yr * yf)
+            / ((1 + yi) * (1 + yo) - yr * yf),
         )
 
     def in_out(self, ys=None, yl=None):
