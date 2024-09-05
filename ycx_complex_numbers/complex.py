@@ -3,6 +3,7 @@ import math
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
 
+COMPLEX_TO_STR_FMT=".5f"
 
 class Complex(object):
     """Complex - Complex number class."""
@@ -27,7 +28,7 @@ class Complex(object):
 
     def _to_str(self, fmt=""):
         if fmt == "":
-            fmt = ".5f"
+            fmt = COMPLEX_TO_STR_FMT
         p = self.as_polar()
         return (
             f"{self._symbol+':' if self._symbol else ''}"
