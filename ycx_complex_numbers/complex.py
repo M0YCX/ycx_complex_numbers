@@ -201,7 +201,7 @@ class Net(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m + other.m
-        return self.__class__(c11=res[0], c12=res[1], c21=res[2], c22=res[3])
+        return self.__class__(res[0], res[1], res[2], res[3])
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -210,7 +210,7 @@ class Net(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m - other.m
-        return self.__class__(c11=res[0], c12=res[1], c21=res[2], c22=res[3])
+        return self.__class__(res[0], res[1], res[2], res[3])
 
     def __rsub__(self, other):
         return self.__add__(other)

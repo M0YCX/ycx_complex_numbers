@@ -103,9 +103,10 @@ def test_NetY_in_out():
 
 
 def test_Net_addition_subtraction():
-    n = Net(1 + 0j, 2 + 0j, 3, 4)
-    nres = n + n
-    assert nres == Net(2 + 0j, 4 + 0j, 6 + 0j, 8 + 0j)
+    for c in (Net, NetZ, NetY, NetH, NetT):
+        n = c(1 + 0j, 2 + 0j, 3, 4)
+        nres = n + n
+        assert nres == c(2 + 0j, 4 + 0j, 6 + 0j, 8 + 0j)
 
-    nres2 = nres - n
-    assert nres2 == n
+        nres2 = nres - n
+        assert nres2 == n
