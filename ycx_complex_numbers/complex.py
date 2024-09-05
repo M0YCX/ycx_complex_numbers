@@ -194,13 +194,13 @@ class Net(object):
     @property
     def m(self):
         "as numpy array matrix"
-        return np.array([self.c11, self.c12, self.c21, self.c22])
+        return np.array([[self.c11, self.c12], [self.c21, self.c22]])
 
     def __add__(self, other):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m + other.m
-        return self.__class__(res[0], res[1], res[2], res[3])
+        return self.__class__(res[0][0], res[0][1], res[1][0], res[1][1])
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -209,7 +209,7 @@ class Net(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m - other.m
-        return self.__class__(res[0], res[1], res[2], res[3])
+        return self.__class__(res[0][0], res[0][1], res[1][0], res[1][1])
 
     def __rsub__(self, other):
         return self.__add__(other)
