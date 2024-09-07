@@ -53,8 +53,8 @@ def test_NetH():
     assert n.determinant == (-2 + 0j)
 
 
-def test_NetT():
-    n = NetT(1 + 0j, 2 + 0j, 3, 4)
+def test_NetABCD():
+    n = NetABCD(1 + 0j, 2 + 0j, 3, 4)
     assert n.A == (1 + 0j)
     assert n.B == (2 + 0j)
     assert n.C == (3 + 0j)
@@ -63,21 +63,40 @@ def test_NetT():
     assert n.determinant == (-2 + 0j)
 
 
-def test_NetY_to_ZTHS():
+def test_NetY_to_ZAHS():
     y11 = 13 * 10**-3 + 2j * 10**-3
     y12 = 0 + 0.001j * 10**-3
     y21 = -12 * 10**-3 + 0.1j * 10**-3
     y22 = 1.1 * 10**-3 + 0.15j * 10**-3
 
     n = NetY(y11=y11, y12=y12, y21=y21, y22=y22)
+
     z = n.to_Z()
     assert isinstance(z, NetZ)
+    aa = z.to_ABCD()
+    assert isinstance(aa, NetABCD)
+    hh = z.to_H()
+    assert isinstance(hh, NetH)
+    yy = z.to_Y()
+    assert isinstance(yy, NetY)
 
-    t = n.to_T()
-    assert isinstance(t, NetT)
+    a = n.to_ABCD()
+    assert isinstance(a, NetABCD)
+    hh = a.to_H()
+    assert isinstance(hh, NetH)
+    yy = a.to_Y()
+    assert isinstance(yy, NetY)
+    zz = a.to_Z()
+    assert isinstance(zz, NetZ)
 
     h = n.to_H()
     assert isinstance(h, NetH)
+    aa = h.to_ABCD()
+    assert isinstance(aa, NetABCD)
+    yy = h.to_Y()
+    assert isinstance(yy, NetY)
+    zz = h.to_Z()
+    assert isinstance(zz, NetZ)
 
     s = n.to_S()
     assert isinstance(s, NetS)
@@ -103,7 +122,7 @@ def test_NetY_in_out():
 
 
 def test_Net_addition_subtraction():
-    for c in (Net, NetZ, NetY, NetH, NetT):
+    for c in (Net, NetZ, NetY, NetH, NetABCD):
         n = c(1 + 0j, 2 + 0j, 3, 4)
         nres = n + n
         assert nres == c(2 + 0j, 4 + 0j, 6 + 0j, 8 + 0j)

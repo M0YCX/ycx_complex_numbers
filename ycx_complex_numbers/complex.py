@@ -3,6 +3,7 @@ import math
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
 
+
 class Complex(object):
     """Complex - Complex number class."""
 
@@ -200,7 +201,12 @@ class Net(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m + other.m
-        return self.__class__(res[0][0], res[0][1], res[1][0], res[1][1])
+        return self.__class__(
+            res[0][0],
+            res[0][1],
+            res[1][0],
+            res[1][1],
+        )
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -209,7 +215,12 @@ class Net(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = self.m - other.m
-        return self.__class__(res[0][0], res[0][1], res[1][0], res[1][1])
+        return self.__class__(
+            res[0][0],
+            res[0][1],
+            res[1][0],
+            res[1][1],
+        )
 
     def __rsub__(self, other):
         return self.__add__(other)

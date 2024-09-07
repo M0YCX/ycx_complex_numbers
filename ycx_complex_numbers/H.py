@@ -1,5 +1,5 @@
 from ycx_complex_numbers.complex import Complex, Net
-# from ycx_complex_numbers.Z import NetZ
+import ycx_complex_numbers as cn
 
 
 class H(Complex):
@@ -31,11 +31,26 @@ class NetH(Net):
     def h22(self):
         return self._c22
 
-    # def to_Z(self):
-    #     return NetZ(
-    #         z11=self.y22 / self.determinant,
-    #         z12=-self.y12 / self.determinant,
-    #         z21=-self.y21 / self.determinant,
-    #         z22=self.y11 / self.determinant,
-    #     )
+    def to_ABCD(self):
+        return cn.NetABCD(
+            A=-self.determinant / self.h21,
+            B=-self.h11 / self.h21,
+            C=-self.h22 / self.h21,
+            D=-1 / self.h21,
+        )
 
+    def to_Y(self):
+        return cn.NetY(
+            y11=1 / self.h11,
+            y12=-self.h12 / self.h11,
+            y21=self.h21 / self.h11,
+            y22=self.determinant / self.h11,
+        )
+
+    def to_Z(self):
+        return cn.NetZ(
+            z11=self.determinant / self.h22,
+            z12=self.h12 / self.h22,
+            z21=-self.h21 / self.h22,
+            z22=1 / self.h22,
+        )

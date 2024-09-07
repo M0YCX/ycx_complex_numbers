@@ -31,6 +31,22 @@ class NetZ(Net):
     def z22(self):
         return self._c22
 
+    def to_ABCD(self):
+        return cn.NetABCD(
+            A=self.z11 / self.z21,
+            B=self.determinant / self.z21,
+            C=1 / self.z21,
+            D=self.z22 / self.z21,
+        )
+
+    def to_H(self):
+        return cn.NetH(
+            h11=self.determinant / self.z22,
+            h12=self.z12 / self.z22,
+            h21=-self.z21 / self.z22,
+            h22=1 / self.z22,
+        )
+
     def to_Y(self):
         return cn.NetY(
             y11=self.z22 / self.determinant,
