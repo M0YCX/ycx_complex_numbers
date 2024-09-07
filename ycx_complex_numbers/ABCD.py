@@ -31,6 +31,22 @@ class NetABCD(Net):
     def D(self):
         return self._c22
 
+    @property
+    def a11(self):
+        return self._c11
+
+    @property
+    def a12(self):
+        return self._c12
+
+    @property
+    def a21(self):
+        return self._c21
+
+    @property
+    def a22(self):
+        return self._c22
+
     def to_H(self):
         return cn.NetH(
             h11=self.B / self.D,
