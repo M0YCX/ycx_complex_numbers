@@ -240,19 +240,19 @@ class Net(object):
     def __rmul__(self, other):
         return self.__mul__(other)
 
-    def __truediv__(self, other):
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-        res = self.m / other.m
-        return self.__class__(
-            res[0][0],
-            res[0][1],
-            res[1][0],
-            res[1][1],
-        )
+    # def __truediv__(self, other):
+    #     if not isinstance(other, self.__class__):
+    #         return NotImplemented
+    #     res = self.m / other.m
+    #     return self.__class__(
+    #         res[0][0],
+    #         res[0][1],
+    #         res[1][0],
+    #         res[1][1],
+    #     )
 
-    def __rtruediv__(self, other):
-        return self.__truediv__(other)
+    # def __rtruediv__(self, other):
+    #     return self.__truediv__(other)
 
     @property
     def determinant(self):

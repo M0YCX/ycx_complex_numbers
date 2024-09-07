@@ -58,7 +58,7 @@ class NetABCD(Net):
     def to_Y(self):
         return cn.NetY(
             y11=self.D / self.B,
-            y12=self.determinant / self.B,
+            y12=-self.determinant / self.B,
             y21=-1 / self.B,
             y22=self.A / self.B,
         )
