@@ -228,7 +228,8 @@ class Net(object):
     def __mul__(self, other):
         if not isinstance(other, self.__class__):
             return NotImplemented
-        res = self.m * other.m
+        # res = self.m * other.m
+        res = np.matmul(self.m, other.m)
         return self.__class__(
             res[0][0],
             res[0][1],
