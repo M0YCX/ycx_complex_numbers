@@ -55,19 +55,16 @@ class NetY(Net):
             z22=self.y11 / self.determinant,
         )
 
-    def to_S(self, Z0=50+0j):
+    def to_S(self, Z0=50 + 0j):
         yi = self.y11 * Z0
         yr = self.y12 * Z0
         yf = self.y21 * Z0
         yo = self.y22 * Z0
         return cn.NetS(
-            s11=((1 - yi) * (1 + yo) + yr * yf)
-            / ((1 + yi) * (1 + yo) - yr * yf),
-            s12=(-2 * yr)
-            / ((1 + yi) * (1 + yo) - yr * yf),
+            s11=((1 - yi) * (1 + yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
+            s12=(-2 * yr) / ((1 + yi) * (1 + yo) - yr * yf),
             s21=(-2 * yf) / ((1 + yi) * (1 + yo) - yr * yf),
-            s22=((1 + yi) * (1 - yo) + yr * yf)
-            / ((1 + yi) * (1 + yo) - yr * yf),
+            s22=((1 + yi) * (1 - yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
         )
 
     def in_out(self, ys=None, yl=None):
@@ -81,3 +78,62 @@ class NetY(Net):
             "ys": ys,
             "yl": yl,
         }
+
+    #############################################
+    # Amplifier Config Exchanges/Transformations
+    def exchange_to_ce(self, from_config=None):
+        """Exchange Amplifier Y Matrix to Common Emitter"""
+        if from_config == "cb":
+            return NetY(
+                y11=self.y11 + self.y12 + self.y21 + self.y22,
+                y12=-(self.y12 + self.y22),
+                y21=-(self.y21 + self.y22),
+                y22=self.y22,
+            )
+        elif from_config == "cc":
+            return NetY(
+                y11=self.y11,
+                y12=-(self.y11 + self.y12),
+                y21=-(self.y11 + self.y21),
+                y22=self.y11 + self.y12 + self.y21 + self.y22,
+            )
+        else:
+            raise ValueError(f"from_config {from_config} must be 'cb' or 'cc'")
+
+    def exchange_to_cb(self, from_config=None):
+        """Exchange Amplifier Y Matrix to Common Base"""
+        if from_config == "ce":
+            return NetY(
+                y11=self.y11 + self.y12 + self.y21 + self.y22,
+                y12=-(self.y12 + self.y22),
+                y21=-(self.y21 + self.y22),
+                y22=self.y22,
+            )
+        elif from_config == "cc":
+            return NetY(
+                y11=self.y22,
+                y12=-(self.y21 + self.y22),
+                y21=-(self.y12 + self.y22),
+                y22=self.y11 + self.y12 + self.y21 + self.y22,
+            )
+        else:
+            raise ValueError(f"from_config {from_config} must be 'ce' or 'cc'")
+
+    def exchange_to_cc(self, from_config=None):
+        """Exchange Amplifier Y Matrix to Common Collector"""
+        if from_config == "ce":
+            return NetY(
+                y11=self.y11,
+                y12=-(self.y11 + self.y12),
+                y21=-(self.y11 + self.y21),
+                y22=self.y11,
+            )
+        elif from_config == "cb":
+            return NetY(
+                y11=self.y11 + self.y12 + self.y21 + self.y22,
+                y12=-(self.y11 + self.y21),
+                y21=-(self.y11 + self.y12),
+                y22=self.y11 + self.y12 + self.y21 + self.y22,
+            )
+        else:
+            raise ValueError(f"from_config {from_config} must be 'ce' or 'cb'")
