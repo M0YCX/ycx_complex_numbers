@@ -3,6 +3,7 @@ import re
 import pytest
 
 CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
+CX_S_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j :\n\[mag:.*\]$"
 
 @pytest.mark.parametrize(
     "test_input",
@@ -310,6 +311,23 @@ def test_repr(test_input1, test_re1):
     c = test_input1
     assert re.match(test_re1, str(c))
 
+@pytest.mark.parametrize(
+    "test_input1, test_re1",
+    [
+        (Complex(3 + 4j), rf"^{CX_S_RE}"),
+        (S(3 + 4j), rf"^S:{CX_S_RE}"),
+        (Y(3 + 4j), rf"^Y:{CX_S_RE}"),
+        (Z(3 + 4j), rf"^Z:{CX_S_RE}"),
+        (H(3 + 4j), rf"^H:{CX_S_RE}"),
+        (ABCD(3 + 4j), rf"^ABCD:{CX_S_RE}"),
+        (ReflCoef(3 + 4j), rf"^𝚪:{CX_S_RE}"),
+    ],
+)
+def test_str_fmt_S(test_input1, test_re1):
+    c = test_input1
+    print(f"--- {c}")
+    print(f"--- {c:~S}")
+    assert re.match(test_re1, f"{c:~S}")
 
 @pytest.mark.parametrize(
     "test_input1",

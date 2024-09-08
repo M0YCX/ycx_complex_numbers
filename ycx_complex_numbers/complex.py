@@ -26,13 +26,20 @@ class Complex(object):
         return self
 
     def _to_str(self, fmt=""):
+        fmtparts = fmt.split("~")
+        fmt = fmtparts[0]
+        linesep = " "
+        if len(fmtparts) > 1 and "S" in fmtparts[1]:
+            linesep = "\n"
+
         if fmt == "":
             fmt = ".5f"
+
         p = self.as_polar()
         return (
             f"{self._symbol+':' if self._symbol else ''}"
             + format(self._c, fmt)
-            + " : [mag:"
+            + f" :{linesep}[mag:"
             + format(p["mag"], fmt)
             + " ∠"
             + format(p["angle"], fmt)
@@ -46,6 +53,7 @@ class Complex(object):
         return str(self)
 
     def __format__(self, fmt):
+        print(f"fmt={fmt}")
         return self._to_str(fmt=fmt)
 
     def __abs__(self):
