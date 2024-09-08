@@ -53,7 +53,8 @@ class Complex(object):
         return str(self)
 
     def __format__(self, fmt):
-        print(f"fmt={fmt}")
+        """format handles custom :.2f~S -
+        the ~S adds a newline between the complex and the polar parts """
         return self._to_str(fmt=fmt)
 
     def __abs__(self):
