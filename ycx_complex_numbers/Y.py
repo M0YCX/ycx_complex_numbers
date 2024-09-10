@@ -126,14 +126,14 @@ class NetY(Net):
                 y11=self.y11,
                 y12=-(self.y11 + self.y12),
                 y21=-(self.y11 + self.y21),
-                y22=self.y11,
+                y22=self.y11 + self.y12 + self.y21 + self.y22,
             )
         elif from_config == "cb":
             return NetY(
                 y11=self.y11 + self.y12 + self.y21 + self.y22,
                 y12=-(self.y11 + self.y21),
                 y21=-(self.y11 + self.y12),
-                y22=self.y11 + self.y12 + self.y21 + self.y22,
+                y22=self.y11,
             )
         else:
             raise ValueError(f"from_config {from_config} must be 'ce' or 'cb'")
