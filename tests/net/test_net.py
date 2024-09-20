@@ -135,3 +135,20 @@ def test_Net_multiply():
     c2=Net(2, 3, 4, 5)
     res = c1 * c2
     assert res == Net(10, 13, 22, 29)
+
+def test_Net_a_b():
+    a1 = Neta(1 + 0j, 2 + 0j, 3, 4)
+    assert isinstance(a1, Neta)
+
+    b1 = a1.to_b()
+    assert isinstance(b1, Netb)
+
+    assert a1 != b1
+
+    a2 = b1.to_a()
+    assert isinstance(a2, Neta)
+    assert a2 == a1
+
+    b2 = a2.to_b()
+    assert isinstance(b2, Netb)
+    assert b2 == b1
