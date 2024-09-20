@@ -31,13 +31,16 @@ class NetH(Net):
     def h22(self):
         return self._c22
 
-    def to_ABCD(self):
+    def to_a(self):
         return cn.NetABCD(
             A=-self.determinant / self.h21,
             B=-self.h11 / self.h21,
             C=-self.h22 / self.h21,
             D=-1 / self.h21,
         )
+
+    def to_ABCD(self):
+        return self.to_a()
 
     def to_Y(self):
         return cn.NetY(
