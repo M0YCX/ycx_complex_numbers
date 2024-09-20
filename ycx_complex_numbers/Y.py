@@ -70,13 +70,21 @@ class NetY(Net):
             s22=((1 + yi) * (1 - yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
         )
 
+    def yin(self, YL=1/(50 + 0j)):
+        return self.y11 - (self.y12 * self.y21) / (self.y22 + YL)
+
+    def yout(self, YS=1/(50 + 0j)):
+        return self.y22 - (self.y12 * self.y21) / (self.y11 + YS)
+
     def in_out(self, ys=None, yl=None):
         """return the input and output admittance for this Y matrix and given source and load admittances"""
         ys = Y(ys)
         yl = Y(yl)
         return {
-            "Yin": self.y11 - (self.y12 * self.y21) / (yl + self.y22),
-            "Yout": self.y22 - (self.y12 * self.y21) / (ys + self.y11),
+            # "Yin": self.y11 - (self.y12 * self.y21) / (yl + self.y22),
+            "Yin": self.yin(YL=yl),
+            # "Yout": self.y22 - (self.y12 * self.y21) / (ys + self.y11),
+            "Yout": self.yout(YS=ys),
             "Y": self,
             "ys": ys,
             "yl": yl,
