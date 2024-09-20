@@ -32,11 +32,11 @@ class NetY(Net):
         return self._c22
 
     def to_a(self):
-        return cn.NetABCD(
-            A=-self.y22 / self.y21,
-            B=-1 / self.y21,
-            C=-self.determinant / self.y21,
-            D=-self.y11 / self.y21,
+        return cn.Neta(
+            a11=-self.y22 / self.y21,
+            a12=-1 / self.y21,
+            a21=-self.determinant / self.y21,
+            a22=-self.y11 / self.y21,
         )
 
     def to_ABCD(self):

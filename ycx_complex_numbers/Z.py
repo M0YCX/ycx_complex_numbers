@@ -32,11 +32,11 @@ class NetZ(Net):
         return self._c22
 
     def to_a(self):
-        return cn.NetABCD(
-            A=self.z11 / self.z21,
-            B=self.determinant / self.z21,
-            C=1 / self.z21,
-            D=self.z22 / self.z21,
+        return cn.Neta(
+            a11=self.z11 / self.z21,
+            a12=self.determinant / self.z21,
+            a21=1 / self.z21,
+            a22=self.z22 / self.z21,
         )
 
     def to_ABCD(self):
