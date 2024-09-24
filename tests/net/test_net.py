@@ -136,11 +136,13 @@ def test_Net_addition_subtraction():
         nres2 = nres - n
         assert nres2 == n
 
+
 def test_Net_multiply():
-    c1=Net(1, 2, 3, 4)
-    c2=Net(2, 3, 4, 5)
+    c1 = Net(1, 2, 3, 4)
+    c2 = Net(2, 3, 4, 5)
     res = c1 * c2
     assert res == Net(10, 13, 22, 29)
+
 
 def test_Net_a_b():
     a1 = Neta(1 + 0j, 2 + 0j, 3, 4)
@@ -158,3 +160,28 @@ def test_Net_a_b():
     b2 = a2.to_b()
     assert isinstance(b2, Netb)
     assert b2 == b1
+
+
+def test_NetY_exchanges():
+    y11 = 13 * 10**-3 + 2j * 10**-3
+    y12 = 1 + 0.001j * 10**-3
+    y21 = -12 * 10**-3 + 0.1j * 10**-3
+    y22 = 1.1 * 10**-3 + 0.15j * 10**-3
+
+    # assume start as ce
+    nce = NetY(y11=y11, y12=y12, y21=y21, y22=y22)
+
+    nce_cb = nce.exchange_to_cb(from_config="ce")
+    nce_cc = nce.exchange_to_cc(from_config="ce")
+
+    nce_cb_ce = nce_cb.exchange_to_ce(from_config="cb")
+    assert nce_cb_ce.equals(nce, precision=9)
+
+    nce_cb_cc = nce_cb.exchange_to_cc(from_config="cb")
+    assert nce_cb_cc.equals(nce_cc, precision=9)
+
+    nce_cc_ce = nce_cb_cc.exchange_to_ce(from_config="cc")
+    assert nce.equals(nce_cc_ce, precision=9)
+
+    nce_cc_cb = nce_cb_cc.exchange_to_cb(from_config="cc")
+    assert nce_cb.equals(nce_cc_cb, precision=9)

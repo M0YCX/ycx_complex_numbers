@@ -54,7 +54,7 @@ class Complex(object):
 
     def __format__(self, fmt):
         """format handles custom :.2f~S -
-        the ~S adds a newline between the complex and the polar parts """
+        the ~S adds a newline between the complex and the polar parts"""
         return self._to_str(fmt=fmt)
 
     def __abs__(self):
@@ -174,16 +174,31 @@ class Net(object):
     def __format__(self, fmt):
         return self._to_str(fmt=fmt)
 
-    def __eq__(self, other):
+    def _round_complex(self, x, precision=None):
+        return complex(round(x.real, precision), round(x.imag, precision))
+
+    def equals(self, other, precision=None):
+        """comparison of Nets with optional precision rounding"""
         if not isinstance(other, self.__class__):
             return NotImplemented
 
-        return (
-            self.c11 == other.c11
-            and self.c12 == other.c12
-            and self.c21 == other.c21
-            and self.c22 == other.c22
-        )
+        if precision is None:
+            return (
+                self.c11 == other.c11
+                and self.c12 == other.c12
+                and self.c21 == other.c21
+                and self.c22 == other.c22
+            )
+        else:
+            return (
+                self._round_complex(self.c11) == self._round_complex(other.c11)
+                and self._round_complex(self.c12) == self._round_complex(other.c12)
+                and self._round_complex(self.c21) == self._round_complex(other.c21)
+                and self._round_complex(self.c22) == self._round_complex(other.c22)
+            )
+
+    def __eq__(self, other):
+        return self.equals(other)
 
     @property
     def c11(self):
