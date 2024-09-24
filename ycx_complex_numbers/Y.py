@@ -70,10 +70,10 @@ class NetY(Net):
             s22=((1 + yi) * (1 - yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
         )
 
-    def yin(self, YL=1/(50 + 0j)):
+    def yin(self, YL=1 / (50 + 0j)):
         return self.y11 - (self.y12 * self.y21) / (self.y22 + YL)
 
-    def yout(self, YS=1/(50 + 0j)):
+    def yout(self, YS=1 / (50 + 0j)):
         return self.y22 - (self.y12 * self.y21) / (self.y11 + YS)
 
     def in_out(self, ys=None, yl=None):
@@ -92,16 +92,17 @@ class NetY(Net):
 
     #############################################
     # Amplifier Config Exchanges/Transformations
+    # NOTE: These apply to jfets too
     def exchange_to_ce(self, from_config=None):
         """Exchange Amplifier Y Matrix to Common Emitter"""
-        if from_config == "cb":
+        if from_config in ["cb", "cg"]:
             return NetY(
                 y11=self.y11 + self.y12 + self.y21 + self.y22,
                 y12=-(self.y12 + self.y22),
                 y21=-(self.y21 + self.y22),
                 y22=self.y22,
             )
-        elif from_config == "cc":
+        elif from_config in ["cc", "cd"]:
             return NetY(
                 y11=self.y11,
                 y12=-(self.y11 + self.y12),
@@ -113,14 +114,14 @@ class NetY(Net):
 
     def exchange_to_cb(self, from_config=None):
         """Exchange Amplifier Y Matrix to Common Base"""
-        if from_config == "ce":
+        if from_config in ["ce", "cs"]:
             return NetY(
                 y11=self.y11 + self.y12 + self.y21 + self.y22,
                 y12=-(self.y12 + self.y22),
                 y21=-(self.y21 + self.y22),
                 y22=self.y22,
             )
-        elif from_config == "cc":
+        elif from_config in ["cc", "cd"]:
             return NetY(
                 y11=self.y22,
                 y12=-(self.y21 + self.y22),
@@ -132,14 +133,14 @@ class NetY(Net):
 
     def exchange_to_cc(self, from_config=None):
         """Exchange Amplifier Y Matrix to Common Collector"""
-        if from_config == "ce":
+        if from_config in ["ce", "cs"]:
             return NetY(
                 y11=self.y11,
                 y12=-(self.y11 + self.y12),
                 y21=-(self.y11 + self.y21),
                 y22=self.y11 + self.y12 + self.y21 + self.y22,
             )
-        elif from_config == "cb":
+        elif from_config in ["cb", "cg"]:
             return NetY(
                 y11=self.y11 + self.y12 + self.y21 + self.y22,
                 y12=-(self.y11 + self.y21),
