@@ -58,10 +58,8 @@ class NetZ(Net):
             y22=self.z11 / self.determinant,
         )
 
-    @property
     def zin(self, ZL=50 + 0j):
         return self.z11 - (self.z12 * self.z21) / (self.z22 + ZL)
 
-    @property
     def zout(self, ZS=50 + 0j):
         return self.z22 - (self.z12 * self.z21) / (self.z11 + ZS)
