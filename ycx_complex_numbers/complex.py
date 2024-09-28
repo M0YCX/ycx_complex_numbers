@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from warnings import warn
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
 
@@ -218,7 +219,7 @@ class Net(object):
 
     @property
     def m(self):
-        "as numpy array matrix"
+        """as numpy array matrix"""
         return np.array([[self.c11, self.c12], [self.c21, self.c22]])
 
     def __add__(self, other):
@@ -249,10 +250,12 @@ class Net(object):
     def __rsub__(self, other):
         return self.__sub__(other)
 
-    def __mul__(self, other):
+
+
+    def __matmul__(self, other):
+        """ matric product, e.g.: `net1 @ net2 @ net3`"""
         if not isinstance(other, self.__class__):
             return NotImplemented
-        # res = self.m * other.m
         res = np.matmul(self.m, other.m)
         return self.__class__(
             res[0][0],
@@ -262,7 +265,11 @@ class Net(object):
         )
 
     def __rmul__(self, other):
-        return self.__mul__(other)
+        raise NotImplementedError("__rmul__ not implemented")
+
+    def __mul__(self, other):
+        warn("Network operation '*' is deprecated, use '@' instead for matrix product")
+        return self.__matmul__(other)
 
     # def __truediv__(self, other):
     #     if not isinstance(other, self.__class__):

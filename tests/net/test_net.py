@@ -136,13 +136,17 @@ def test_Net_addition_subtraction():
         nres2 = nres - n
         assert nres2 == n
 
-
-def test_Net_multiply():
+def test_Net_matrix_product():
     c1 = Net(1, 2, 3, 4)
     c2 = Net(2, 3, 4, 5)
-    res = c1 * c2
+    res = c1 @ c2
     assert res == Net(10, 13, 22, 29)
 
+# def test_Net_deprecated_matrix_product():
+#     c1 = Net(1, 2, 3, 4)
+#     c2 = Net(2, 3, 4, 5)
+#     res = c1 * c2
+#     assert res == Net(10, 13, 22, 29)
 
 def test_Net_a_b():
     a1 = Neta(1 + 0j, 2 + 0j, 3, 4)

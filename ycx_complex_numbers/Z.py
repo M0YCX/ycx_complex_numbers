@@ -3,13 +3,20 @@ import ycx_complex_numbers as cn
 
 
 class Z(Complex):
-    """Z - Z (Impedance)."""
+    """Z - Represents complex Z (Impedance) (R+/-Xj)."""
 
     _symbol = "Z"
 
     def __init__(self, c=None):
         super().__init__(c)
 
+    @property
+    def R(self):
+        return self._c.real
+
+    @property
+    def X(self):
+        return self._c.imag
 
 class NetZ(Net):
     def __init__(self, z11=None, z12=None, z21=None, z22=None):

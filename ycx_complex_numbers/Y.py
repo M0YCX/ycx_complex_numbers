@@ -3,13 +3,20 @@ import ycx_complex_numbers as cn
 
 
 class Y(Complex):
-    """Y - A Y (Admittance) parameter."""
+    """Y - Represents complex Y (Admittance) parameter (G+/-Bj)."""
 
     _symbol = "Y"
 
     def __init__(self, c=None):
         super().__init__(c)
 
+    @property
+    def G(self):
+        return self._c.real
+
+    @property
+    def B(self):
+        return self._c.imag
 
 class NetY(Net):
     def __init__(self, y11=None, y12=None, y21=None, y22=None):
