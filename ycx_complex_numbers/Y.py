@@ -119,6 +119,9 @@ class NetY(Net):
         else:
             raise ValueError(f"from_config {from_config} must be 'cb' or 'cc'")
 
+    def exchange_to_cs(self, from_config=None):
+        return self.exchange_to_ce(self, from_config=from_config)
+
     def exchange_to_cb(self, from_config=None):
         """Exchange Amplifier Y Matrix to Common Base"""
         if from_config in ["ce", "cs"]:
@@ -138,6 +141,9 @@ class NetY(Net):
         else:
             raise ValueError(f"from_config {from_config} must be 'ce' or 'cc'")
 
+    def exchange_to_cg(self, from_config=None):
+        return self.exchange_to_cb(self, from_config=from_config)
+
     def exchange_to_cc(self, from_config=None):
         """Exchange Amplifier Y Matrix to Common Collector"""
         if from_config in ["ce", "cs"]:
@@ -156,3 +162,6 @@ class NetY(Net):
             )
         else:
             raise ValueError(f"from_config {from_config} must be 'ce' or 'cb'")
+
+    def exchange_to_cd(self, from_config=None):
+        return self.exchange_to_cc(self, from_config=from_config)
