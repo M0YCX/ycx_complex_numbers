@@ -253,7 +253,7 @@ class Net(object):
 
 
     def __matmul__(self, other):
-        """ matric product, e.g.: `net1 @ net2 @ net3`"""
+        """ matrix product, e.g.: `net1 @ net2 @ net3`"""
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = np.matmul(self.m, other.m)
@@ -264,12 +264,18 @@ class Net(object):
             res[1][1],
         )
 
-    def __rmul__(self, other):
-        raise NotImplementedError("__rmul__ not implemented")
-
     def __mul__(self, other):
-        warn("Network operation '*' is deprecated, use '@' instead for matrix product")
-        return self.__matmul__(other)
+        "multiply element-wise"
+        res = other * self.m
+        return self.__class__(
+            res[0][0],
+            res[0][1],
+            res[1][0],
+            res[1][1],
+        )
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
 
     # def __truediv__(self, other):
     #     if not isinstance(other, self.__class__):

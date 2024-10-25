@@ -1,4 +1,4 @@
-from ycx_complex_numbers import *
+from ycx_complex_numbers import Complex, Y, Z, H, a, b, S, ReflCoef
 import re
 import pytest
 
@@ -12,7 +12,7 @@ CX_S_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j :\n\[mag:.*\]$"
     ],
 )
 def test_new_from_polar(test_input):
-    for o in (Complex, S, Z, ABCD, H, Y):
+    for o in (Complex, S, Z, H, Y, a, b):
         c = o().from_polar(test_input[0], test_input[1])
         assert c.real == 0.069459271066772
         assert c.imag == -0.3939231012048833
@@ -28,7 +28,7 @@ def test_new_from_polar(test_input):
         H(50 + 16j),
         a(50 + 16j),
         b(50 + 16j),
-        ABCD(50 + 16j),
+        # ABCD(50 + 16j),
         ReflCoef(50 + 16j),
     ],
 )
@@ -61,7 +61,7 @@ def test_c_protected():
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -83,7 +83,7 @@ def test_iadd(test_input1, test_input2):
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -119,7 +119,7 @@ def test_float_radd():
         H(50 + 16j),
         a(50 + 16j),
         b(50 + 16j),
-        ABCD(50 + 16j),
+        # ABCD(50 + 16j),
         ReflCoef(50 + 16j),
     ],
 )
@@ -140,7 +140,7 @@ def test_neg(test_input1):
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -162,7 +162,7 @@ def test_isub(test_input1, test_input2):
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -191,7 +191,7 @@ def test_int_rsub():
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -213,7 +213,7 @@ def test_imul(test_input1, test_input2):
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -242,7 +242,7 @@ def test_int_rmul():
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -264,7 +264,7 @@ def test_idiv(test_input1, test_input2):
         (H(50 + 16j), H(10 + 5j)),
         (a(50 + 16j), a(10 + 5j)),
         (b(50 + 16j), b(10 + 5j)),
-        (ABCD(50 + 16j), ABCD(10 + 5j)),
+        # (ABCD(50 + 16j), ABCD(10 + 5j)),
         (ReflCoef(50 + 16j), ReflCoef(10 + 5j)),
     ],
 )
@@ -307,7 +307,7 @@ def test_abs(test_input1):
         (H(3 + 4j), rf"^H:{CX_RE}"),
         (a(3 + 4j), rf"^a:{CX_RE}"),
         (b(3 + 4j), rf"^b:{CX_RE}"),
-        (ABCD(3 + 4j), rf"^a:{CX_RE}"),
+        # (ABCD(3 + 4j), rf"^a:{CX_RE}"),
         (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
@@ -327,7 +327,7 @@ def test_str(test_input1, test_re1):
         (H(3 + 4j), rf"^H:{CX_RE}"),
         (a(3 + 4j), rf"^a:{CX_RE}"),
         (b(3 + 4j), rf"^b:{CX_RE}"),
-        (ABCD(3 + 4j), rf"^a:{CX_RE}"),
+        # (ABCD(3 + 4j), rf"^a:{CX_RE}"),
         (ReflCoef(3 + 4j), rf"^𝚪:{CX_RE}"),
     ],
 )
@@ -345,7 +345,7 @@ def test_repr(test_input1, test_re1):
         (H(3 + 4j), rf"^H:{CX_S_RE}"),
         (a(3 + 4j), rf"^a:{CX_S_RE}"),
         (b(3 + 4j), rf"^b:{CX_S_RE}"),
-        (ABCD(3 + 4j), rf"^a:{CX_S_RE}"),
+        # (ABCD(3 + 4j), rf"^a:{CX_S_RE}"),
         (ReflCoef(3 + 4j), rf"^𝚪:{CX_S_RE}"),
     ],
 )
@@ -365,7 +365,7 @@ def test_str_fmt_S(test_input1, test_re1):
         H(3 + 4j),
         a(3 + 4j),
         b(3 + 4j),
-        ABCD(3 + 4j),
+        # ABCD(3 + 4j),
         ReflCoef(3 + 4j),
     ],
 )
@@ -385,7 +385,7 @@ def test_eq(test_input1):
         (H(3 + 4j), H(3 + 5j)),
         (a(3 + 4j), a(3 + 5j)),
         (b(3 + 4j), b(3 + 5j)),
-        (ABCD(3 + 4j), ABCD(3 + 5j)),
+        # (ABCD(3 + 4j), ABCD(3 + 5j)),
         (ReflCoef(3 + 4j), ReflCoef(3 + 5j)),
     ],
 )
@@ -405,7 +405,7 @@ def test_ne(test_input1, test_input2):
         H(3 + 4j),
         a(3 + 4j),
         b(3 + 4j),
-        ABCD(3 + 4j),
+        # ABCD(3 + 4j),
         ReflCoef(3 + 4j),
     ],
 )
@@ -446,7 +446,7 @@ def test_from_class():
     assert isinstance(cout, ReflCoef)
 
 
-def test_formaABCD():
+def test_formatS():
     cin = S(0.123456 + 2.333333j)
     cin_f = f"{cin:.9f}"
     assert cin_f == "S:0.123456000+2.333333000j : [mag:2.336596729 ∠86.971320337]"

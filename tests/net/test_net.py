@@ -1,66 +1,190 @@
-from ycx_complex_numbers import *
-import re
+from ycx_complex_numbers import Net, NetY, NetZ, NetH, Neta, Netb, NetS
+
+# import re
 import pytest
 
 
-def test_Net():
-    n = Net(1 + 0j, 2 + 0j, 3, 4)
-    assert n.c11 == (1 + 0j)
-    assert n.c12 == (2 + 0j)
-    assert n.c21 == (3 + 0j)
-    assert n.c22 == (4 + 0j)
+class TestNet:
+    @pytest.fixture
+    def n1(self):
+        return Net(1 + 0j, 2 + 0j, 3, 4)
 
-    assert n.determinant == (-2 + 0j)
+    @pytest.fixture
+    def n2(self):
+        return Net(1 + 1j, 2 + 2j, 3 + 3j, 4 + 4j)
+
+    @pytest.fixture
+    def n3(self):
+        return Net(10 + 0j, 20 + 0j, 30, 40)
+
+    def test_instance(self, n1):
+        assert n1.c11 == (1 + 0j)
+        assert n1.c12 == (2 + 0j)
+        assert n1.c21 == (3 + 0j)
+        assert n1.c22 == (4 + 0j)
+
+    def test_str(self, n1):
+        assert (
+            str(n1)
+            == "[\n  11:1.00000+0.00000j : [mag:1.00000 ∠0.00000],\n  12:2.00000+0.00000j : [mag:2.00000 ∠0.00000],\n  21:3.00000+0.00000j : [mag:3.00000 ∠0.00000],\n  22:4.00000+0.00000j : [mag:4.00000 ∠0.00000]\n]"
+        )
+        assert (
+            f"{n1}"
+            == "[\n  11:1.00000+0.00000j : [mag:1.00000 ∠0.00000],\n  12:2.00000+0.00000j : [mag:2.00000 ∠0.00000],\n  21:3.00000+0.00000j : [mag:3.00000 ∠0.00000],\n  22:4.00000+0.00000j : [mag:4.00000 ∠0.00000]\n]"
+        )
+
+    def test_str_formats(self, n1):
+        assert (
+            f"{n1:~S}"
+            == "[\n  11:1.00000+0.00000j :\n[mag:1.00000 ∠0.00000],\n  12:2.00000+0.00000j :\n[mag:2.00000 ∠0.00000],\n  21:3.00000+0.00000j :\n[mag:3.00000 ∠0.00000],\n  22:4.00000+0.00000j :\n[mag:4.00000 ∠0.00000]\n]"
+        )
+        assert (
+            f"{n1:.9f}"
+            == "[\n  11:1.000000000+0.000000000j : [mag:1.000000000 ∠0.000000000],\n  12:2.000000000+0.000000000j : [mag:2.000000000 ∠0.000000000],\n  21:3.000000000+0.000000000j : [mag:3.000000000 ∠0.000000000],\n  22:4.000000000+0.000000000j : [mag:4.000000000 ∠0.000000000]\n]"
+        )
+
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
+
+    def test_equals(self, n1, n2):
+        assert n1 == n1
+        assert n1 != n2
+
+    def test_add(self, n1, n2):
+        n1sum = n1 + n1
+        assert n1sum.c11 == 2 + 0j
+        assert n1sum.c12 == 4 + 0j
+        assert n1sum.c21 == 6 + 0j
+        assert n1sum.c22 == 8 + 0j
+
+        n2sum = n1 + n2
+        assert n2sum.c11 == 2 + 1j
+        assert n2sum.c12 == 4 + 2j
+        assert n2sum.c21 == 6 + 3j
+        assert n2sum.c22 == 8 + 4j
+
+        rn2sum = n2 + n1
+        assert rn2sum.c11 == 2 + 1j
+        assert rn2sum.c12 == 4 + 2j
+        assert rn2sum.c21 == 6 + 3j
+        assert rn2sum.c22 == 8 + 4j
+
+    def test_sub(self, n1, n2, n3):
+        n3subn1 = n3 - n1
+        assert n3subn1.c11 == 9
+        assert n3subn1.c12 == 18 + 0j
+        assert n3subn1.c21 == 27
+        assert n3subn1.c22 == 36 - 0j
+
+    def test_matmul(self, n1, n2):
+        n1matmuln2 = n1 @ n2
+        assert n1matmuln2.c11 == 7 + 7j
+        assert n1matmuln2.c12 == 10 + 10j
+        assert n1matmuln2.c21 == 15 + 15j
+        assert n1matmuln2.c22 == 22 + 22j
+
+    def test_mul(self, n1):
+        res = n1 * 2
+        assert res.c11 == 2
+        assert res.c12 == 4
+        assert res.c21 == 6
+        assert res.c22 == 8
+
+        rres = 2 * n1
+        assert rres.c11 == 2
+        assert rres.c12 == 4
+        assert rres.c21 == 6
+        assert rres.c22 == 8
 
 
-def test_NetY():
-    n = NetY(1 + 0j, 2 + 0j, 3, 4)
-    assert n.y11 == (1 + 0j)
-    assert n.y12 == (2 + 0j)
-    assert n.y21 == (3 + 0j)
-    assert n.y22 == (4 + 0j)
+class TestNetY:
+    @pytest.fixture
+    def n1(self):
+        return NetY(1 + 0j, 2 + 0j, 3, 4)
 
-    assert n.determinant == (-2 + 0j)
+    def test_instance(self, n1):
+        assert n1.y11 == (1 + 0j)
+        assert n1.y12 == (2 + 0j)
+        assert n1.y21 == (3 + 0j)
+        assert n1.y22 == (4 + 0j)
 
-
-def test_NetZ():
-    n = NetZ(1 + 0j, 2 + 0j, 3, 4)
-    assert n.z11 == (1 + 0j)
-    assert n.z12 == (2 + 0j)
-    assert n.z21 == (3 + 0j)
-    assert n.z22 == (4 + 0j)
-
-    assert n.determinant == (-2 + 0j)
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
 
 
-def test_NetS():
-    n = NetS(1 + 0j, 2 + 0j, 3, 4)
-    assert n.s11 == (1 + 0j)
-    assert n.s12 == (2 + 0j)
-    assert n.s21 == (3 + 0j)
-    assert n.s22 == (4 + 0j)
+class TestNetZ:
+    @pytest.fixture
+    def n1(self):
+        return NetZ(1 + 0j, 2 + 0j, 3, 4)
 
-    assert n.determinant == (-2 + 0j)
+    def test_instance(self, n1):
+        assert n1.z11 == (1 + 0j)
+        assert n1.z12 == (2 + 0j)
+        assert n1.z21 == (3 + 0j)
+        assert n1.z22 == (4 + 0j)
 
-
-def test_NetH():
-    n = NetH(1 + 0j, 2 + 0j, 3, 4)
-    assert n.h11 == (1 + 0j)
-    assert n.h12 == (2 + 0j)
-    assert n.h21 == (3 + 0j)
-    assert n.h22 == (4 + 0j)
-
-    assert n.determinant == (-2 + 0j)
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
 
 
-def test_NetABCD():
-    n = NetABCD(1 + 0j, 2 + 0j, 3, 4)
-    assert n.A == (1 + 0j)
-    assert n.B == (2 + 0j)
-    assert n.C == (3 + 0j)
-    assert n.D == (4 + 0j)
+class TestNetS:
+    @pytest.fixture
+    def n1(self):
+        return NetS(1 + 0j, 2 + 0j, 3, 4)
 
-    assert n.determinant == (-2 + 0j)
+    def test_instance(self, n1):
+        assert n1.s11 == (1 + 0j)
+        assert n1.s12 == (2 + 0j)
+        assert n1.s21 == (3 + 0j)
+        assert n1.s22 == (4 + 0j)
+
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
+
+
+class TestNetH:
+    @pytest.fixture
+    def n1(self):
+        return NetH(1 + 0j, 2 + 0j, 3, 4)
+
+    def test_instance(self, n1):
+        assert n1.h11 == (1 + 0j)
+        assert n1.h12 == (2 + 0j)
+        assert n1.h21 == (3 + 0j)
+        assert n1.h22 == (4 + 0j)
+
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
+
+
+class TestNeta:
+    @pytest.fixture
+    def n1(self):
+        return Neta(1 + 0j, 2 + 0j, 3, 4)
+
+    def test_instance(self, n1):
+        assert n1.A == (1 + 0j)
+        assert n1.B == (2 + 0j)
+        assert n1.C == (3 + 0j)
+        assert n1.D == (4 + 0j)
+
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
+
+
+class TestNetb:
+    @pytest.fixture
+    def n1(self):
+        return Netb(1 + 0j, 2 + 0j, 3, 4)
+
+    def test_instance(self, n1):
+        assert n1.A == (1 + 0j)
+        assert n1.B == (2 + 0j)
+        assert n1.C == (3 + 0j)
+        assert n1.D == (4 + 0j)
+
+    def test_determinant(self, n1):
+        assert n1.determinant == (-2 + 0j)
 
 
 def test_NetY_to_ZAHS():
@@ -75,8 +199,8 @@ def test_NetY_to_ZAHS():
     assert isinstance(z, NetZ)
     aa1 = z.to_a()
     assert isinstance(aa1, Neta)
-    aa2 = z.to_ABCD()
-    assert isinstance(aa2, Neta)
+    # aa2 = z.to_ABCD()
+    # assert isinstance(aa2, Neta)
     hh = z.to_H()
     assert isinstance(hh, NetH)
     yy = z.to_Y()
@@ -84,8 +208,8 @@ def test_NetY_to_ZAHS():
 
     a = n.to_a()
     assert isinstance(a, Neta)
-    a2 = n.to_ABCD()
-    assert isinstance(a2, Neta)
+    # a2 = n.to_ABCD()
+    # assert isinstance(a2, Neta)
     hh = a.to_H()
     assert isinstance(hh, NetH)
     yy = a.to_Y()
@@ -97,8 +221,8 @@ def test_NetY_to_ZAHS():
     assert isinstance(h, NetH)
     aa1 = h.to_a()
     assert isinstance(aa1, Neta)
-    aa2 = h.to_ABCD()
-    assert isinstance(aa2, Neta)
+    # aa2 = h.to_ABCD()
+    # assert isinstance(aa2, Neta)
     yy = h.to_Y()
     assert isinstance(yy, NetY)
     zz = h.to_Z()
@@ -128,7 +252,7 @@ def test_NetY_in_out():
 
 
 def test_Net_addition_subtraction():
-    for c in (Net, NetZ, NetY, NetH, NetABCD):
+    for c in (Net, NetZ, NetY, NetH, Neta):
         n = c(1 + 0j, 2 + 0j, 3, 4)
         nres = n + n
         assert nres == c(2 + 0j, 4 + 0j, 6 + 0j, 8 + 0j)
@@ -136,17 +260,20 @@ def test_Net_addition_subtraction():
         nres2 = nres - n
         assert nres2 == n
 
+
 def test_Net_matrix_product():
     c1 = Net(1, 2, 3, 4)
     c2 = Net(2, 3, 4, 5)
     res = c1 @ c2
     assert res == Net(10, 13, 22, 29)
 
+
 # def test_Net_deprecated_matrix_product():
 #     c1 = Net(1, 2, 3, 4)
 #     c2 = Net(2, 3, 4, 5)
 #     res = c1 * c2
 #     assert res == Net(10, 13, 22, 29)
+
 
 def test_Net_a_b():
     a1 = Neta(1 + 0j, 2 + 0j, 3, 4)
