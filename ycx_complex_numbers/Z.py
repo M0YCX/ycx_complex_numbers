@@ -38,12 +38,28 @@ class NetZ(Net):
     def z22(self):
         return self._c22
 
+    @property
+    def is_passive(self):
+        return self.z12 == self.z21
+
+    @property
+    def is_symmetrical(self):
+        return self.z11 == self.z22
+
     def to_a(self):
         return cn.Neta(
             a11=self.z11 / self.z21,
             a12=self.determinant / self.z21,
             a21=1 / self.z21,
             a22=self.z22 / self.z21,
+        )
+
+    def to_b(self):
+        return cn.Netb(
+            b11=self.z22 / self.z12,
+            b12=self.determinant / self.z12,
+            b21=1 / self.z12,
+            b22=self.z11 / self.z12,
         )
 
     def to_ABCD(self):

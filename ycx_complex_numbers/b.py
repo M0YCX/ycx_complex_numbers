@@ -47,6 +47,14 @@ class Netb(Net):
     def b22(self):
         return self._c22
 
+    @property
+    def is_passive(self):
+        return self.A * self.D - self.B * self.C == 1
+
+    @property
+    def is_symmetrical(self):
+        return self.A == self.D
+
     def to_a(self):
         return cn.Neta(
             a11=self.D / self.determinant,
