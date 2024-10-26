@@ -73,3 +73,16 @@ class NetH(Net):
             z21=-self.h21 / self.h22,
             z22=1 / self.h22,
         )
+
+    def to_S(self, Z0=50 + 0j):
+        hi = self.h11 / Z0
+        hr = self.h12
+        hf = self.h21
+        ho = self.h22 * Z0
+        d = (hi + 1) * (ho + 1) - hr * hf
+        return cn.NetS(
+            s11=((hi - 1) * (ho + 1) - hr * hf) / d,
+            s12=(2 * hr) / d,
+            s21=(-2 * hf) / d,
+            s22=((1 + hi) * (1 - ho) + hr * hf) / d,
+        )

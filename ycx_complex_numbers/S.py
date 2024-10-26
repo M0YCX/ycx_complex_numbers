@@ -1,5 +1,6 @@
 from ycx_complex_numbers.complex import Complex, Net
 from ycx_complex_numbers.Y import NetY
+import ycx_complex_numbers as cn
 
 
 class S(Complex):
@@ -45,4 +46,31 @@ class NetS(Net):
             y22=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21)
             / ((1 + self.s22) * (1 + self.s11) - self.s12 * self.s21)
             * (1 / Z0),
+        )
+
+    def to_Z(self, Z0=50+0j):
+        d = (1 - self.s11) * (1 - self.s22) - self.s12 * self.s21
+        return cn.NetZ(
+            z11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d * Z0,
+            z12=(2 * self.s12) / d * Z0,
+            z21=(2 * self.s21) / d * Z0,
+            z22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d * Z0,
+        )
+
+    def to_a(self):
+        d = 2 * self.s21
+        return cn.Neta(
+            a11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d,
+            a12=((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d,
+            a21=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d,
+            a22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d,
+        )
+
+    def to_H(self, Z0=50 + 0j):
+        d = (1 - self.s11) * (1 + self.s22) + self.s12 * self.s21
+        return cn.NetH(
+            h11=((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d * Z0,
+            h12=(2 * self.s12) / d,
+            h21=(-2 * self.s21) / d,
+            h22=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d * (1 / Z0),
         )

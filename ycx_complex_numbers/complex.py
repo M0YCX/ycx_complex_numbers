@@ -192,10 +192,14 @@ class Net(object):
             )
         else:
             return (
-                self._round_complex(self.c11) == self._round_complex(other.c11)
-                and self._round_complex(self.c12) == self._round_complex(other.c12)
-                and self._round_complex(self.c21) == self._round_complex(other.c21)
-                and self._round_complex(self.c22) == self._round_complex(other.c22)
+                self._round_complex(self.c11, precision)
+                == self._round_complex(other.c11, precision)
+                and self._round_complex(self.c12, precision)
+                == self._round_complex(other.c12, precision)
+                and self._round_complex(self.c21, precision)
+                == self._round_complex(other.c21, precision)
+                and self._round_complex(self.c22, precision)
+                == self._round_complex(other.c22, precision)
             )
 
     def __eq__(self, other):
@@ -250,10 +254,8 @@ class Net(object):
     def __rsub__(self, other):
         return self.__sub__(other)
 
-
-
     def __matmul__(self, other):
-        """ matrix product, e.g.: `net1 @ net2 @ net3`"""
+        """matrix product, e.g.: `net1 @ net2 @ net3`"""
         if not isinstance(other, self.__class__):
             return NotImplemented
         res = np.matmul(self.m, other.m)
@@ -273,9 +275,9 @@ class Net(object):
             res[1][0],
             res[1][1],
         )
+
     def __rmul__(self, other):
         return self.__mul__(other)
-
 
     # def __truediv__(self, other):
     #     if not isinstance(other, self.__class__):

@@ -86,3 +86,12 @@ class Neta(Net):
             z21=1 / self.C,
             z22=self.D / self.C,
         )
+
+    def to_S(self):
+        d = self.A + self.B + self.C + self.D
+        return cn.NetS(
+            s11=(self.A + self.B - self.C - self.D) / d,
+            s12=(2 * (self.A * self.D - self.B * self.C)) / d,
+            s21=2 / d,
+            s22=(-self.A + self.B - self.C + self.D) / d,
+        )

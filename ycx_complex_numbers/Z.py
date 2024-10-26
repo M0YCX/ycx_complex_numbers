@@ -81,6 +81,18 @@ class NetZ(Net):
             y22=self.z11 / self.determinant,
         )
 
+    def to_S(self, Z0=50 + 0j):
+        zi = self.z11 / Z0
+        zr = self.z12 / Z0
+        zf = self.z21 / Z0
+        zo = self.z22 / Z0
+        return cn.NetS(
+            s11=((zi - 1) * (zo + 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+            s12=(2 * zr) / ((zi + 1) * (zo + 1) - zr * zf),
+            s21=(2 * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+            s22=((zi + 1) * (zo - 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+        )
+
     def zin(self, ZL=50 + 0j):
         return self.z11 - (self.z12 * self.z21) / (self.z22 + ZL)
 
