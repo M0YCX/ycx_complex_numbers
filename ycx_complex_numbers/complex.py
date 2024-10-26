@@ -21,6 +21,7 @@ class Complex(object):
             self._c = c + 0j
 
     def from_polar(self, mag, angle):
+        """Create a Complex instance from a polar coordinate using magnitude and phase angle"""
         x = mag * np.cos(np.deg2rad(angle))
         y = mag * np.sin(np.deg2rad(angle))
         self._c = complex(x, y)
@@ -62,14 +63,19 @@ class Complex(object):
         return abs(self._c)
 
     def as_complex(self):
+        """Return Complex as a pure python complex number"""
         return self._c
 
     def as_polar(self):
+        """Return as polar magnitude and phase angle"""
         mag = abs(self._c)
         angle = math.degrees(math.atan2(self._c.imag, self._c.real))
         return {"mag": mag, "angle": angle}
 
     def as_conjugate(self):
+        """Return the complex conjugate
+
+        see also conjugate() property"""
         return self.__class__((self._c.real - 1j * self._c.imag))
 
     @property
@@ -223,7 +229,7 @@ class Net(object):
 
     @property
     def m(self):
-        """as numpy array matrix"""
+        """as a numpy square 2x2 array matrix"""
         return np.array([[self.c11, self.c12], [self.c21, self.c22]])
 
     def __add__(self, other):
@@ -295,4 +301,5 @@ class Net(object):
 
     @property
     def determinant(self):
+        """Return the determinant of the complex square matrix"""
         return self._c11 * self._c22 - self._c12 * self._c21

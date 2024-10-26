@@ -19,6 +19,7 @@ class Z(Complex):
         return self._c.imag
 
 class NetZ(Net):
+    """Z - Impedance 2-port-node parameters."""
     def __init__(self, z11=None, z12=None, z21=None, z22=None):
         super().__init__(c11=Z(z11), c12=Z(z12), c21=Z(z21), c22=Z(z22))
 
@@ -47,6 +48,7 @@ class NetZ(Net):
         return self.z11 == self.z22
 
     def to_a(self):
+        """Convert to ABCD parameters"""
         return cn.Neta(
             a11=self.z11 / self.z21,
             a12=self.determinant / self.z21,
@@ -55,6 +57,7 @@ class NetZ(Net):
         )
 
     def to_b(self):
+        """Convert to ABCD' parameters"""
         return cn.Netb(
             b11=self.z22 / self.z12,
             b12=self.determinant / self.z12,
@@ -66,6 +69,7 @@ class NetZ(Net):
         return self.to_a()
 
     def to_H(self):
+        """Convert to H parameters"""
         return cn.NetH(
             h11=self.determinant / self.z22,
             h12=self.z12 / self.z22,
@@ -74,6 +78,7 @@ class NetZ(Net):
         )
 
     def to_Y(self):
+        """Convert to Y parameters"""
         return cn.NetY(
             y11=self.z22 / self.determinant,
             y12=-self.z12 / self.determinant,
@@ -82,6 +87,7 @@ class NetZ(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
+        """Convert to S parameters"""
         zi = self.z11 / Z0
         zr = self.z12 / Z0
         zf = self.z21 / Z0

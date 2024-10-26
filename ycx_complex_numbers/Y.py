@@ -19,6 +19,7 @@ class Y(Complex):
         return self._c.imag
 
 class NetY(Net):
+    """Y - Admittance 2-port-node parameters."""
     def __init__(self, y11=None, y12=None, y21=None, y22=None):
         super().__init__(c11=Y(y11), c12=Y(y12), c21=Y(y21), c22=Y(y22))
 
@@ -47,6 +48,7 @@ class NetY(Net):
         return self.y11 == self.y22
 
     def to_a(self):
+        """Convert to ABCD parameters"""
         return cn.Neta(
             a11=-self.y22 / self.y21,
             a12=-1 / self.y21,
@@ -55,6 +57,7 @@ class NetY(Net):
         )
 
     def to_b(self):
+        """Convert to ABCD' parameters"""
         return cn.Netb(
             b11=-self.y11 / self.y12,
             b12=-1 / self.y12,
@@ -66,6 +69,7 @@ class NetY(Net):
         return self.to_a()
 
     def to_H(self):
+        """Convert to H parameters"""
         return cn.NetH(
             h11=1 / self.y11,
             h12=-self.y12 / self.y11,
@@ -74,6 +78,7 @@ class NetY(Net):
         )
 
     def to_Z(self):
+        """Convert to Z parameters"""
         return cn.NetZ(
             z11=self.y22 / self.determinant,
             z12=-(self.y12 / self.determinant),
@@ -82,6 +87,7 @@ class NetY(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
+        """Convert to S parameters"""
         yi = self.y11 * Z0
         yr = self.y12 * Z0
         yf = self.y21 * Z0

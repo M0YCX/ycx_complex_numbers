@@ -3,7 +3,7 @@ import ycx_complex_numbers as cn
 
 
 class a(Complex):
-    """ABCD - A ABCD (fwd Chain/Cascade/Transmission) parameters."""
+    """ABCD - A ABCD (fwd Chain/Cascade/Transmission) parameter."""
 
     _symbol = "a"
 
@@ -12,6 +12,7 @@ class a(Complex):
 
 
 class Neta(Net):
+    """ABCD - An ABCD (fwd Chain/Cascade/Transmission) 2-port-node parameters."""
     def __init__(self, a11=None, a12=None, a21=None, a22=None):
         super().__init__(c11=a(a11), c12=a(a12), c21=a(a21), c22=a(a22))
 
@@ -56,6 +57,7 @@ class Neta(Net):
         return self.A == self.D
 
     def to_b(self):
+        """Convert to ABCD' parameters"""
         return cn.Netb(
             b11=self.D / self.determinant,
             b12=self.B / self.determinant,
@@ -64,6 +66,7 @@ class Neta(Net):
         )
 
     def to_H(self):
+        """Convert to H parameters"""
         return cn.NetH(
             h11=self.B / self.D,
             h12=self.determinant / self.D,
@@ -72,6 +75,7 @@ class Neta(Net):
         )
 
     def to_Y(self):
+        """Convert to Y parameters"""
         return cn.NetY(
             y11=self.D / self.B,
             y12=-self.determinant / self.B,
@@ -80,6 +84,7 @@ class Neta(Net):
         )
 
     def to_Z(self):
+        """Convert to Z parameters"""
         return cn.NetZ(
             z11=self.A / self.C,
             z12=self.determinant / self.C,
@@ -88,6 +93,7 @@ class Neta(Net):
         )
 
     def to_S(self):
+        """Convert to S parameters"""
         d = self.A + self.B + self.C + self.D
         return cn.NetS(
             s11=(self.A + self.B - self.C - self.D) / d,

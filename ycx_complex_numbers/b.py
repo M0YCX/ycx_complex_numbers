@@ -3,7 +3,7 @@ import ycx_complex_numbers as cn
 
 
 class b(Complex):
-    """ABCD' - A ABCD' (rev Chain/Cascade/Transmission) parameters."""
+    """ABCD' - A ABCD' (rev Chain/Cascade/Transmission) parameter."""
 
     _symbol = "b"
 
@@ -12,6 +12,7 @@ class b(Complex):
 
 
 class Netb(Net):
+    """ABCD' - An ABCD' (rev Chain/Cascade/Transmission) 2-port-node parameters."""
     def __init__(self, b11=None, b12=None, b21=None, b22=None):
         super().__init__(c11=b(b11), c12=b(b12), c21=b(b21), c22=b(b22))
 
@@ -56,6 +57,7 @@ class Netb(Net):
         return self.A == self.D
 
     def to_a(self):
+        """Convert to ABCD parameters"""
         return cn.Neta(
             a11=self.D / self.determinant,
             a12=self.B / self.determinant,
@@ -64,6 +66,7 @@ class Netb(Net):
         )
 
     def to_H(self):
+        """Convert to H parameters"""
         return cn.NetH(
             h11=self.B / self.A,
             h12=1 / self.A,
@@ -72,6 +75,7 @@ class Netb(Net):
         )
 
     def to_Y(self):
+        """Convert to Y parameters"""
         return cn.NetY(
             y11=self.A / self.B,
             y12=-1 / self.B,
@@ -80,6 +84,7 @@ class Netb(Net):
         )
 
     def to_Z(self):
+        """Convert to Z parameters"""
         return cn.NetZ(
             z11=self.D / self.C,
             z12=1 / self.C,

@@ -13,6 +13,7 @@ class S(Complex):
 
 
 class NetS(Net):
+    """S - Scatter 2-port-node parameters."""
     def __init__(self, s11=None, s12=None, s21=None, s22=None):
         super().__init__(c11=S(s11), c12=S(s12), c21=S(s21), c22=S(s22))
 
@@ -33,6 +34,7 @@ class NetS(Net):
         return self._c22
 
     def to_Y(self, Z0=50 + 0j):
+        """Convert to Y parameters"""
         return NetY(
             y11=((1 + self.s22) * (1 - self.s11) + self.s12 * self.s21)
             / ((1 + self.s11) * (1 + self.s22) + self.s12 * self.s21)
@@ -49,6 +51,7 @@ class NetS(Net):
         )
 
     def to_Z(self, Z0=50+0j):
+        """Convert to Z parameters"""
         d = (1 - self.s11) * (1 - self.s22) - self.s12 * self.s21
         return cn.NetZ(
             z11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d * Z0,
@@ -58,6 +61,7 @@ class NetS(Net):
         )
 
     def to_a(self):
+        """Convert to ABCD parameters"""
         d = 2 * self.s21
         return cn.Neta(
             a11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d,
@@ -67,6 +71,7 @@ class NetS(Net):
         )
 
     def to_H(self, Z0=50 + 0j):
+        """Convert to H parameters"""
         d = (1 - self.s11) * (1 + self.s22) + self.s12 * self.s21
         return cn.NetH(
             h11=((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d * Z0,

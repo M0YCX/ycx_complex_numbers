@@ -12,6 +12,7 @@ class H(Complex):
 
 
 class NetH(Net):
+    """H - (hybrid) 2-port-node parameters."""
     def __init__(self, h11=None, h12=None, h21=None, h22=None):
         super().__init__(c11=H(h11), c12=H(h12), c21=H(h21), c22=H(h22))
 
@@ -40,6 +41,7 @@ class NetH(Net):
         return self.determinant == 1
 
     def to_a(self):
+        """Convert to ABCD parameters"""
         return cn.Neta(
             a11=-self.determinant / self.h21,
             a12=-self.h11 / self.h21,
@@ -48,6 +50,7 @@ class NetH(Net):
         )
 
     def to_b(self):
+        """Convert to ABCD' parameters"""
         return cn.Netb(
             b11=1 / self.h12,
             b12=self.h11 / self.h12,
@@ -59,6 +62,7 @@ class NetH(Net):
         return self.to_a()
 
     def to_Y(self):
+        """Convert to Y parameters"""
         return cn.NetY(
             y11=1 / self.h11,
             y12=-self.h12 / self.h11,
@@ -67,6 +71,7 @@ class NetH(Net):
         )
 
     def to_Z(self):
+        """Convert to Z parameters"""
         return cn.NetZ(
             z11=self.determinant / self.h22,
             z12=self.h12 / self.h22,
@@ -75,6 +80,7 @@ class NetH(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
+        """Convert to S parameters"""
         hi = self.h11 / Z0
         hr = self.h12
         hf = self.h21
