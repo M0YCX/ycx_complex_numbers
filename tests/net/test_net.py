@@ -119,6 +119,46 @@ class TestNetY:
     def test_determinant(self, n1):
         assert n1.determinant == (-2 + 0j)
 
+    def test_NetY_in_out(self, n2):
+        YS = 1 / (50 + 0j)
+        YL = 1 / (1800 + 0j)
+
+        yin_out = n2.in_out(ys=YS, yl=YL)
+
+        assert "Yin" in yin_out
+        assert "Yout" in yin_out
+
+        assert str(yin_out["Yin"]) == "Y:0.01300+0.00201j : [mag:0.01315 ∠8.77662]"
+        assert str(yin_out["Yout"]) == "Y:0.00110+0.00015j : [mag:0.00111 ∠7.78351]"
+
+    def test_NetY_exchanges(self, n2):
+        # assume start as ce
+        nce = n2
+        nce_cb = nce.exchange_to_cb(from_config="ce")
+        nce_cc = nce.exchange_to_cc(from_config="ce")
+
+        nce_cb_ce = nce_cb.exchange_to_ce(from_config="cb")
+        assert nce_cb_ce.equals(nce, precision=9)
+
+        nce_cb_cc = nce_cb.exchange_to_cc(from_config="cb")
+        assert nce_cb_cc.equals(nce_cc, precision=9)
+
+        nce_cc_ce = nce_cb_cc.exchange_to_ce(from_config="cc")
+        assert nce.equals(nce_cc_ce, precision=9)
+
+        nce_cc_cb = nce_cb_cc.exchange_to_cb(from_config="cc")
+        assert nce_cb.equals(nce_cc_cb, precision=9)
+
+
+class TestNetConversions:
+    @pytest.fixture
+    def n2(self):
+        y11 = 13 * 10**-3 + 2j * 10**-3
+        y12 = 0 + 0.001j * 10**-3
+        y21 = -12 * 10**-3 + 0.1j * 10**-3
+        y22 = 1.1 * 10**-3 + 0.15j * 10**-3
+        return NetY(y11=y11, y12=y12, y21=y21, y22=y22)
+
     def test_NetY_to_ZAHS(self, n2):
         y = n2
         z1 = y.to_Z()
@@ -223,37 +263,6 @@ class TestNetY:
         hh = s.to_H()
         assert isinstance(hh, NetH)
         assert hh.to_S().equals(s, precision=9)
-
-
-    def test_NetY_in_out(self, n2):
-        YS = 1 / (50 + 0j)
-        YL = 1 / (1800 + 0j)
-
-        yin_out = n2.in_out(ys=YS, yl=YL)
-
-        assert "Yin" in yin_out
-        assert "Yout" in yin_out
-
-        assert str(yin_out["Yin"]) == "Y:0.01300+0.00201j : [mag:0.01315 ∠8.77662]"
-        assert str(yin_out["Yout"]) == "Y:0.00110+0.00015j : [mag:0.00111 ∠7.78351]"
-
-    def test_NetY_exchanges(self, n2):
-        # assume start as ce
-        nce = n2
-        nce_cb = nce.exchange_to_cb(from_config="ce")
-        nce_cc = nce.exchange_to_cc(from_config="ce")
-
-        nce_cb_ce = nce_cb.exchange_to_ce(from_config="cb")
-        assert nce_cb_ce.equals(nce, precision=9)
-
-        nce_cb_cc = nce_cb.exchange_to_cc(from_config="cb")
-        assert nce_cb_cc.equals(nce_cc, precision=9)
-
-        nce_cc_ce = nce_cb_cc.exchange_to_ce(from_config="cc")
-        assert nce.equals(nce_cc_ce, precision=9)
-
-        nce_cc_cb = nce_cb_cc.exchange_to_cb(from_config="cc")
-        assert nce_cb.equals(nce_cc_cb, precision=9)
 
 
 class TestNetZ:
