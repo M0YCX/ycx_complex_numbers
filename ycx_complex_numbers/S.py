@@ -14,6 +14,7 @@ class S(Complex):
 
 class NetS(Net):
     """S - Scatter 2-port-node parameters."""
+
     def __init__(self, s11=None, s12=None, s21=None, s22=None):
         super().__init__(c11=S(s11), c12=S(s12), c21=S(s21), c22=S(s22))
 
@@ -50,7 +51,7 @@ class NetS(Net):
             * (1 / Z0),
         )
 
-    def to_Z(self, Z0=50+0j):
+    def to_Z(self, Z0=50 + 0j):
         """Convert to Z parameters"""
         d = (1 - self.s11) * (1 - self.s22) - self.s12 * self.s21
         return cn.NetZ(
@@ -78,4 +79,14 @@ class NetS(Net):
             h12=(2 * self.s12) / d,
             h21=(-2 * self.s21) / d,
             h22=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d * (1 / Z0),
+        )
+
+    def reflcoefin(self, ReflcoefL=cn.ReflCoef(0 + 0j)):
+        return cn.ReflCoef(
+            self.s11 + (self.s12 * self.s21 * ReflcoefL) / (1 - self.s22 * ReflcoefL)
+        )
+
+    def reflcoefout(self, ReflcoefS=cn.ReflCoef(0 + 0j)):
+        return cn.ReflCoef(
+            self.s22 + (self.s12 * self.s21 * ReflcoefS) / (1 - self.s11 * ReflcoefS)
         )

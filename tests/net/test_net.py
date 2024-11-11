@@ -1,4 +1,4 @@
-from ycx_complex_numbers import Net, NetY, NetZ, NetH, Neta, Netb, NetS
+from ycx_complex_numbers import Net, NetY, NetZ, NetH, Neta, Netb, NetS, ReflCoef
 
 # import re
 import pytest
@@ -293,6 +293,16 @@ class TestNetS:
 
     def test_determinant(self, n1):
         assert n1.determinant == (-2 + 0j)
+
+    def test_reflcoefin(self, n1):
+        rin = n1.reflcoefin()
+        assert isinstance(rin, ReflCoef)
+        assert rin == 1 + 0j
+
+    def test_reflcoefout(self, n1):
+        rout = n1.reflcoefout()
+        assert isinstance(rout, ReflCoef)
+        assert rout == 4 + 0j
 
 
 class TestNetH:
