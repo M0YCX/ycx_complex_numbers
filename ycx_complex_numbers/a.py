@@ -92,12 +92,16 @@ class Neta(Net):
             z22=self.D / self.C,
         )
 
-    def to_S(self):
+    def to_S(self, Z0=50 + 0j):
         """Convert to S parameters"""
-        d = self.A + self.B + self.C + self.D
+        Ap = self.A
+        Bp = self.B / Z0
+        Cp = self.C * Z0
+        Dp = self.D
+        d = Ap + Bp + Cp + Dp
         return cn.NetS(
-            s11=(self.A + self.B - self.C - self.D) / d,
-            s12=(2 * (self.A * self.D - self.B * self.C)) / d,
+            s11=(Ap + Bp - Cp - Dp) / d,
+            s12=(2 * (Ap * Dp - Bp * Cp)) / d,
             s21=2 / d,
-            s22=(-self.A + self.B - self.C + self.D) / d,
+            s22=(-Ap + Bp - Cp + Dp) / d,
         )

@@ -209,7 +209,7 @@ class TestNetConversions:
         assert zz.to_a().equals(a, precision=12)
         ss = a.to_S()
         assert isinstance(ss, NetS)
-        assert ss.to_a().equals(a, precision=13)
+        assert ss.to_a().equals(a, precision=12)
 
         b = b1
         aa1 = b.to_a()

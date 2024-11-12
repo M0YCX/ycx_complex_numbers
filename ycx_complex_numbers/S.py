@@ -61,14 +61,18 @@ class NetS(Net):
             z22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d * Z0,
         )
 
-    def to_a(self):
+    def to_a(self, Z0=50 + 0j):
         """Convert to ABCD parameters"""
         d = 2 * self.s21
+        Ap = ((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d
+        Bp = ((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d
+        Cp = ((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d
+        Dp = ((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d
         return cn.Neta(
-            a11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d,
-            a12=((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d,
-            a21=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d,
-            a22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d,
+            a11=Ap,
+            a12=Bp * Z0,
+            a21=Cp / Z0,
+            a22=Dp,
         )
 
     def to_H(self, Z0=50 + 0j):
