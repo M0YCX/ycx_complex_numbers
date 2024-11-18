@@ -119,6 +119,10 @@ class NetY(Net):
             "yl": yl,
         }
 
+    @property
+    def linvill_stability(self):
+        return abs(self.y21 * self.y12) / (2 * self.y11.real * self.y22.real - (self.y21 * self.y12).real)
+
     #############################################
     # Amplifier Config Exchanges/Transformations
     # NOTE: These apply to jfets too

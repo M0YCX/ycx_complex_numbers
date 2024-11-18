@@ -94,3 +94,9 @@ class NetS(Net):
         return cn.ReflCoef(
             self.s22 + (self.s12 * self.s21 * ReflcoefS) / (1 - self.s11 * ReflcoefS)
         )
+
+    @property
+    def rollett_stability(self):
+        return (
+            1 + abs(self.determinant) ** 2 - abs(self.s11) ** 2 - abs(self.s22) ** 2
+        ) / (2 * abs(self.s21) * abs(self.s12))

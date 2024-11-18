@@ -1,4 +1,4 @@
-from ycx_complex_numbers import Net, NetY, NetZ, NetH, Neta, Netb, NetS, ReflCoef
+from ycx_complex_numbers import S, Y, Net, NetY, NetZ, NetH, Neta, Netb, NetS, ReflCoef
 
 # import re
 import pytest
@@ -110,6 +110,15 @@ class TestNetY:
         y22 = 1.1 * 10**-3 + 0.15j * 10**-3
         return NetY(y11=y11, y12=y12, y21=y21, y22=y22)
 
+    @pytest.fixture
+    def n3(self):
+        return NetY(
+            y11=Y(14 + 1j),
+            y12=Y(0.2 - 0.2j),
+            y21=Y(-14 + 0.8j),
+            y22=Y(0.2 + 2j),
+        )
+
     def test_instance(self, n1):
         assert n1.y11 == (1 + 0j)
         assert n1.y12 == (2 + 0j)
@@ -118,6 +127,10 @@ class TestNetY:
 
     def test_determinant(self, n1):
         assert n1.determinant == (-2 + 0j)
+
+    def test_linvill_stability(self, n3):
+        C = round(n3.linvill_stability, 2)
+        assert C == 0.48
 
     def test_NetY_in_out(self, n2):
         YS = 1 / (50 + 0j)
@@ -285,6 +298,16 @@ class TestNetS:
     def n1(self):
         return NetS(1 + 0j, 2 + 0j, 3, 4)
 
+    @pytest.fixture
+    def n2(self):
+        """from RF Circuit Design, Bowick page 143"""
+        return NetS(
+            s11=S().from_polar(0.4, 162),
+            s12=S().from_polar(0.04, 60),
+            s21=S().from_polar(5.2, 63),
+            s22=S().from_polar(0.35, -39),
+        )
+
     def test_instance(self, n1):
         assert n1.s11 == (1 + 0j)
         assert n1.s12 == (2 + 0j)
@@ -303,6 +326,10 @@ class TestNetS:
         rout = n1.reflcoefout()
         assert isinstance(rout, ReflCoef)
         assert rout == 4 + 0j
+
+    def test_rollett_stability(self, n2):
+        k = round(n2.rollett_stability, 2)
+        assert k == 1.74
 
 
 class TestNetH:
