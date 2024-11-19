@@ -104,7 +104,7 @@ class NetS(Net):
         ) / (2 * abs(self.s21) * abs(self.s12))
 
     @property
-    def max_available_gain(self):
+    def max_available_gain_db(self):
         Ds = self.determinant
         K = self.rollett_stability
         if K <= 1:
@@ -117,14 +117,22 @@ class NetS(Net):
         else:
             k_calc = K - math.sqrt(K**2 - 1)
 
-        mag_db = 10 * math.log10(abs(self.s21) / abs(self.s12)) + 10 * math.log10(abs(k_calc))
+        mag_db = 10 * math.log10(abs(self.s21) / abs(self.s12)) + 10 * math.log10(
+            abs(k_calc)
+        )
 
         return mag_db
 
     @property
-    def insertion_gain(self):
+    def insertion_gain_db(self):
         return 20 * math.log10(abs(self.s21))
 
-    def transducer_gain(self, ReflS=None, ReflL=None):
-        Gt = (abs(self.s21)**2 * (1-abs(ReflS)**2) * (1-abs(ReflL)**2)) / (abs((1-self.s11*ReflS)*(1-self.s22*ReflL)-self.s12*self.s21*ReflL*ReflS)**2)
+    def transducer_gain_db(self, ReflS=None, ReflL=None):
+        Gt = (abs(self.s21) ** 2 * (1 - abs(ReflS) ** 2) * (1 - abs(ReflL) ** 2)) / (
+            abs(
+                (1 - self.s11 * ReflS) * (1 - self.s22 * ReflL)
+                - self.s12 * self.s21 * ReflL * ReflS
+            )
+            ** 2
+        )
         return 10 * math.log10(Gt)
