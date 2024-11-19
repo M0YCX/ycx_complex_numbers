@@ -105,11 +105,11 @@ class NetS(Net):
 
     @property
     def max_available_gain_db(self):
-        Ds = self.determinant
         K = self.rollett_stability
         if K <= 1:
-            raise ValueError("K must be greater than 1")
+            return None
 
+        Ds = self.determinant
         B1 = 1 + abs(self.s11) ** 2 - abs(self.s22) ** 2 - abs(Ds) ** 2
 
         if B1 < 0:
@@ -122,6 +122,13 @@ class NetS(Net):
         )
 
         return mag_db
+
+    @property
+    def max_stable_gain_db(self):
+        K = self.rollett_stability
+        if K > 1:
+            return None
+        return 10 * math.log10(abs(self.s21) / abs(self.s12))
 
     @property
     def insertion_gain_db(self):

@@ -332,8 +332,14 @@ class TestNetS:
         assert k == 1.74
 
     def test_max_available_gain_db(self, n2):
-        mag_db = round(n2.max_available_gain_db, 1)
-        assert mag_db == 16.1
+        max_available_gain_db = round(n2.max_available_gain_db, 1)
+        assert max_available_gain_db == 16.1
+
+    def test_max_stable_gain_db(self, n1):
+        max_stable_gain_db = round(n1.max_stable_gain_db, 1)
+        print(f"max_stable_gain_db={max_stable_gain_db}")
+        assert max_stable_gain_db == 1.8
+        # TODO: test valid MSG
 
     def test_insertion_gain_db(self, n2):
         ins_gain_db = round(n2.insertion_gain_db, 1)
@@ -345,6 +351,13 @@ class TestNetS:
             ReflL=ReflCoef().from_polar(0.487, 39),
         )
         assert round(transducer_gain_db, 1) == 16.1
+
+        transducer_gain_db = n2.transducer_gain_db(
+            ReflS=ReflCoef(0),
+            ReflL=ReflCoef(0),
+        )
+        ins_gain_db = round(n2.insertion_gain_db, 1)
+        assert round(transducer_gain_db, 1) == ins_gain_db
 
 
 class TestNetH:
