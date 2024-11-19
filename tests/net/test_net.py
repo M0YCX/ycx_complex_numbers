@@ -331,6 +331,10 @@ class TestNetS:
         k = round(n2.rollett_stability, 2)
         assert k == 1.74
 
+    def test_max_available_gain(self, n2):
+        mag = round(n2.max_available_gain,1)
+        assert mag == 16.1
+
 
 class TestNetH:
     @pytest.fixture

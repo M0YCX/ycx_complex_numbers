@@ -1,3 +1,5 @@
+import math
+
 from ycx_complex_numbers.complex import Complex, Net
 from ycx_complex_numbers.Y import NetY
 import ycx_complex_numbers as cn
@@ -100,3 +102,21 @@ class NetS(Net):
         return (
             1 + abs(self.determinant) ** 2 - abs(self.s11) ** 2 - abs(self.s22) ** 2
         ) / (2 * abs(self.s21) * abs(self.s12))
+
+    @property
+    def max_available_gain(self):
+        Ds = self.determinant
+        K = self.rollett_stability
+        if K <= 1:
+            raise ValueError("K must be greater than 1")
+
+        B1 = 1 + abs(self.s11) ** 2 - abs(self.s22) ** 2 - abs(Ds) ** 2
+
+        if B1 < 0:
+            k_calc = K + math.sqrt(K**2 - 1)
+        else:
+            k_calc = K - math.sqrt(K**2 - 1)
+
+        mag_db = 10 * math.log10(abs(self.s21) / abs(self.s12)) + 10 * math.log10(abs(k_calc))
+
+        return mag_db
