@@ -332,8 +332,19 @@ class TestNetS:
         assert k == 1.74
 
     def test_max_available_gain(self, n2):
-        mag = round(n2.max_available_gain,1)
+        mag = round(n2.max_available_gain, 1)
         assert mag == 16.1
+
+    def test_insertion_gain(self, n2):
+        ins_gain = round(n2.insertion_gain, 1)
+        assert ins_gain == 14.3
+
+    def test_transducer_gain(self, n2):
+        transducer_gain = n2.transducer_gain(
+            ReflS=ReflCoef().from_polar(0.522, -162),
+            ReflL=ReflCoef().from_polar(0.487, 39),
+        )
+        assert round(transducer_gain, 1) == 16.1
 
 
 class TestNetH:
