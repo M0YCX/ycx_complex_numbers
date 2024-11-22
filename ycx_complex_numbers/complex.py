@@ -182,7 +182,7 @@ class Net(object):
         return self._to_str(fmt=fmt)
 
     def _round_complex(self, x, precision=None):
-        return complex(round(x.real, precision), round(x.imag, precision))
+        return Complex(complex(round(x.real, precision), round(x.imag, precision)))
 
     def equals(self, other, precision=None):
         """comparison of Nets with optional precision rounding"""

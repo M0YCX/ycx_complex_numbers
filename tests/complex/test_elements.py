@@ -374,7 +374,6 @@ def test_eq(test_input1):
     c2 = test_input1
     assert c1 == c2
 
-
 @pytest.mark.parametrize(
     "test_input1, test_input2",
     [

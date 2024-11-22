@@ -50,6 +50,26 @@ class TestNet:
         assert n1 == n1
         assert n1 != n2
 
+    def test_equals_with_precision(self):
+        y1 = NetY(
+            y11=0.00549+0.01167j,
+            y12=-0.00004-0.00030j,
+            y21=0.35800-0.05655j,
+            y22=0.00018+0.00144j,
+        )
+        print(f"y1={y1}")
+        y2 = NetY(
+            y11=0.00151+0.00359j,
+            y12=-0.00001-0.00031j,
+            y21=0.10256-0.01436j,
+            y22=0.00005+0.00064j,
+        )
+        print(f"y2={y2}")
+        assert not y1.equals(y2)
+        assert not y1.equals(y2, precision=4)
+        assert not y1.equals(y2, precision=5)
+        assert y1.equals(y2, precision=0)
+
     def test_add(self, n1, n2):
         n1sum = n1 + n1
         assert n1sum.c11 == 2 + 0j
