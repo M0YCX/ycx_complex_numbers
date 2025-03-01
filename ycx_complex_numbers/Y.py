@@ -40,6 +40,22 @@ class NetY(Net):
         return self._c22
 
     @property
+    def yi(self):
+        return self._c11
+
+    @property
+    def yr(self):
+        return self._c12
+
+    @property
+    def yf(self):
+        return self._c21
+
+    @property
+    def yo(self):
+        return self._c22
+
+    @property
     def is_passive(self):
         return self.y12 == self.y21
 
@@ -88,15 +104,15 @@ class NetY(Net):
 
     def to_S(self, Z0=50 + 0j):
         """Convert to S parameters"""
-        yi = self.y11 * Z0
-        yr = self.y12 * Z0
-        yf = self.y21 * Z0
-        yo = self.y22 * Z0
+        ypi = self.y11 * Z0
+        ypr = self.y12 * Z0
+        ypf = self.y21 * Z0
+        ypo = self.y22 * Z0
         return cn.NetS(
-            s11=((1 - yi) * (1 + yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
-            s12=(-2 * yr) / ((1 + yi) * (1 + yo) - yr * yf),
-            s21=(-2 * yf) / ((1 + yi) * (1 + yo) - yr * yf),
-            s22=((1 + yi) * (1 - yo) + yr * yf) / ((1 + yi) * (1 + yo) - yr * yf),
+            s11=((1 - ypi) * (1 + ypo) + ypr * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+            s12=(-2 * ypr) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+            s21=(-2 * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+            s22=((1 + ypi) * (1 - ypo) + ypr * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
         )
 
     def yin(self, YL=1 / (50 + 0j)):
