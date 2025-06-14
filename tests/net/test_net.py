@@ -52,17 +52,17 @@ class TestNet:
 
     def test_equals_with_precision(self):
         y1 = NetY(
-            y11=0.00549+0.01167j,
-            y12=-0.00004-0.00030j,
-            y21=0.35800-0.05655j,
-            y22=0.00018+0.00144j,
+            y11=0.00549 + 0.01167j,
+            y12=-0.00004 - 0.00030j,
+            y21=0.35800 - 0.05655j,
+            y22=0.00018 + 0.00144j,
         )
         print(f"y1={y1}")
         y2 = NetY(
-            y11=0.00151+0.00359j,
-            y12=-0.00001-0.00031j,
-            y21=0.10256-0.01436j,
-            y22=0.00005+0.00064j,
+            y11=0.00151 + 0.00359j,
+            y12=-0.00001 - 0.00031j,
+            y21=0.10256 - 0.01436j,
+            y22=0.00005 + 0.00064j,
         )
         print(f"y2={y2}")
         assert not y1.equals(y2)
@@ -303,6 +303,10 @@ class TestNetZ:
     def n1(self):
         return NetZ(1 + 0j, 2 + 0j, 3, 4)
 
+    @pytest.fixture
+    def n2(self):
+        return NetZ(50 + 0j, 50 + 0j, 50, 50)
+
     def test_instance(self, n1):
         assert n1.z11 == (1 + 0j)
         assert n1.z12 == (2 + 0j)
@@ -311,6 +315,26 @@ class TestNetZ:
 
     def test_determinant(self, n1):
         assert n1.determinant == (-2 + 0j)
+
+    def test_zin(self, n2):
+        zin = n2.zin()
+        print(f"zin={zin}")
+        assert abs(zin) == 25
+
+    def test_zout(self, n2):
+        zout = n2.zout()
+        print(f"zout={zout}")
+        assert abs(zout) == 25
+
+    def test_vswr_in(self, n2):
+        vswr_in = round(n2.vswr_in(),2)
+        print(f"vswr_in={vswr_in}")
+        assert vswr_in == 2.0
+
+    def test_vswr_out(self, n2):
+        vswr_out = round(n2.vswr_out(), 2)
+        print(f"vswr_out={vswr_out}")
+        assert vswr_out == 2.0
 
 
 class TestNetS:

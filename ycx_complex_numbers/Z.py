@@ -18,8 +18,10 @@ class Z(Complex):
     def X(self):
         return self._c.imag
 
+
 class NetZ(Net):
     """Z - Impedance 2-port-node parameters."""
+
     def __init__(self, z11=None, z12=None, z21=None, z22=None):
         super().__init__(c11=Z(z11), c12=Z(z12), c21=Z(z21), c22=Z(z22))
 
@@ -104,3 +106,11 @@ class NetZ(Net):
 
     def zout(self, ZS=50 + 0j):
         return self.z22 - (self.z12 * self.z21) / (self.z11 + ZS)
+
+    def vswr_in(self, Z0=50 + 0j):
+        gamma = (self.zin() - Z0) / (self.zin() + Z0)
+        return (1 + abs(gamma)) / (1 - abs(gamma))
+
+    def vswr_out(self, Z0=50 + 0j):
+        gamma = (self.zout() - Z0) / (self.zout() + Z0)
+        return (1 + abs(gamma)) / (1 - abs(gamma))
