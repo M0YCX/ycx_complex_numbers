@@ -22,6 +22,10 @@ class Z(Complex):
         gamma = (self - Z0) / (self + Z0)
         return round((1 + abs(gamma)) / (1 - abs(gamma)), 3)
 
+    def reflection_coefficient(self, Z0=50+0j):
+        gamma = cn.ReflCoef((self - Z0) / (self + Z0))
+        return gamma
+
 
 class NetZ(Net):
     """Z - Impedance 2-port-node parameters."""

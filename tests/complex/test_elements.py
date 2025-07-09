@@ -473,3 +473,21 @@ def test_Z_vswr(test_input1):
     z = t[0]
     swr = t[1]
     assert z.vswr() == swr
+
+
+@pytest.mark.parametrize(
+    "test_input1",
+    [
+        (Z(50 + 0j), ReflCoef(0+0j)),
+        (Z(25 + 0j), ReflCoef(-0.33333+0j)),
+        (Z(100 + 0j), ReflCoef(0.33333+0j)),
+        (Z(35 + 15j), ReflCoef(-0.14094 + 0.20134j)),
+    ],
+)
+def test_Z_reflection_coefficient(test_input1):
+    t = test_input1
+    z = t[0]
+    zr = z.reflection_coefficient()
+    r = t[1]
+    assert round(zr.c.real, 5) == round(r.c.real, 5)
+    assert round(zr.c.imag, 5) == round(r.c.imag, 5)
