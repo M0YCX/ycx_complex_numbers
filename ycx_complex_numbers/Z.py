@@ -18,6 +18,10 @@ class Z(Complex):
     def X(self):
         return self._c.imag
 
+    def vswr(self, Z0=50+0j):
+        gamma = (self - Z0) / (self + Z0)
+        return round((1 + abs(gamma)) / (1 - abs(gamma)), 3)
+
 
 class NetZ(Net):
     """Z - Impedance 2-port-node parameters."""

@@ -5,6 +5,7 @@ import pytest
 CX_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j : \[mag:.*\]$"
 CX_S_RE = r"\d+\.?\d+[\+\-]\d+\.?\d+j :\n\[mag:.*\]$"
 
+
 @pytest.mark.parametrize(
     "test_input",
     [
@@ -335,6 +336,7 @@ def test_repr(test_input1, test_re1):
     c = test_input1
     assert re.match(test_re1, str(c))
 
+
 @pytest.mark.parametrize(
     "test_input1, test_re1",
     [
@@ -355,6 +357,7 @@ def test_str_fmt_S(test_input1, test_re1):
     print(f"--- {c:~S}")
     assert re.match(test_re1, f"{c:~S}")
 
+
 @pytest.mark.parametrize(
     "test_input1",
     [
@@ -373,6 +376,7 @@ def test_eq(test_input1):
     c1 = test_input1
     c2 = test_input1
     assert c1 == c2
+
 
 @pytest.mark.parametrize(
     "test_input1, test_input2",
@@ -455,3 +459,18 @@ def test_formatS():
     assert cin_f_def == "S:0.12346+2.33333j : [mag:2.33660 ∠86.97132]"
 
 
+@pytest.mark.parametrize(
+    "test_input1",
+    [
+        (Z(50 + 0j), 1.0),
+        (Z(25 + 0j), 2.0),
+        (Z(100 + 0j), 2.0),
+        (Z(35 + 15j), 1.652),
+    ],
+)
+def test_Z_vswr(test_input1):
+    t = test_input1
+    z = t[0]
+    swr = t[1]
+    assert z.vswr() == swr
+    assert False
