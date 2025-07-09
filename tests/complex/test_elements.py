@@ -473,4 +473,3 @@ def test_Z_vswr(test_input1):
     z = t[0]
     swr = t[1]
     assert z.vswr() == swr
-    assert False
