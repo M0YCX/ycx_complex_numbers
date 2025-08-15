@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import cmath
 from warnings import warn
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
@@ -66,8 +67,38 @@ class Complex(object):
         """Return Complex as a pure python complex number"""
         return self._c
 
+    def quadrant(self):
+        """Return which quadrant of the graph the complex number is in (1-4)"""
+        if self._c.real >= 0:
+            if self._c.imag >= 0:
+                return 1
+            else:
+                return 4
+        else:
+            if self._c.imag >= 0:
+                return 2
+            else:
+                return 3
+
     def as_polar(self):
         """Return as polar magnitude and phase angle"""
+        mag = abs(self._c)
+        angle = math.degrees(math.atan2(abs(self._c.imag), abs(self._c.real)))
+        q = self.quadrant()
+        if q == 1:
+            pass
+        elif q == 2:
+            angle = 180 - angle
+        elif q == 3:
+            angle = 180 + angle
+        elif q == 4:
+            angle = 360 - angle
+        else:
+            raise ValueError(f"Invalid quadrant value: {q}")
+        return {"mag": mag, "angle": angle}
+
+    def as_polar_orig(self):
+        """Return as polar magnitude and phase angle (original calc)"""
         mag = abs(self._c)
         angle = math.degrees(math.atan2(self._c.imag, self._c.real))
         return {"mag": mag, "angle": angle}

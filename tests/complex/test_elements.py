@@ -401,6 +401,23 @@ def test_ne(test_input1, test_input2):
 @pytest.mark.parametrize(
     "test_input1",
     [
+        (Complex(3 + 3j), {"mag": 4.242641, "angle": 45}),
+        (Complex(-3 + 3j), {"mag": 4.242641, "angle": 135}),
+        (Complex(-3 - 3j), {"mag": 4.242641, "angle": 225}),
+        (Complex(3 - 3j), {"mag": 4.242641, "angle": 315}),
+    ],
+)
+def test_as_polar_phase(test_input1):
+    c = test_input1[0]
+    ex = test_input1[1]
+    p = c.as_polar()
+    assert round(p["mag"], 6) == ex["mag"]
+    assert round(p["angle"], 2) == ex["angle"]
+
+
+@pytest.mark.parametrize(
+    "test_input1",
+    [
         Complex(3 + 4j),
         S(3 + 4j),
         Y(3 + 4j),
@@ -415,8 +432,11 @@ def test_ne(test_input1, test_input2):
 def test_as_polar(test_input1):
     c = test_input1
     p = c.as_polar()
+    p2 = c.as_polar_orig()
     assert p["mag"] == 5.0
     assert p["angle"] == 53.13010235415598
+    assert p2["mag"] == 5.0
+    assert p2["angle"] == 53.13010235415598
 
 
 @pytest.mark.parametrize(
@@ -478,9 +498,9 @@ def test_Z_vswr(test_input1):
 @pytest.mark.parametrize(
     "test_input1",
     [
-        (Z(50 + 0j), ReflCoef(0+0j)),
-        (Z(25 + 0j), ReflCoef(-0.33333+0j)),
-        (Z(100 + 0j), ReflCoef(0.33333+0j)),
+        (Z(50 + 0j), ReflCoef(0 + 0j)),
+        (Z(25 + 0j), ReflCoef(-0.33333 + 0j)),
+        (Z(100 + 0j), ReflCoef(0.33333 + 0j)),
         (Z(35 + 15j), ReflCoef(-0.14094 + 0.20134j)),
     ],
 )
