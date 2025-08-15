@@ -81,6 +81,12 @@ class Complex(object):
                 return 3
 
     def as_polar(self):
+        """Return as polar magnitude and phase angle (original calc)"""
+        mag = abs(self._c)
+        angle = math.degrees(math.atan2(self._c.imag, self._c.real))
+        return {"mag": mag, "angle": angle}
+
+    def as_polar2(self):
         """Return as polar magnitude and phase angle"""
         mag = abs(self._c)
         angle = math.degrees(math.atan2(abs(self._c.imag), abs(self._c.real)))
@@ -95,12 +101,6 @@ class Complex(object):
             angle = 360 - angle
         else:
             raise ValueError(f"Invalid quadrant value: {q}")
-        return {"mag": mag, "angle": angle}
-
-    def as_polar_orig(self):
-        """Return as polar magnitude and phase angle (original calc)"""
-        mag = abs(self._c)
-        angle = math.degrees(math.atan2(self._c.imag, self._c.real))
         return {"mag": mag, "angle": angle}
 
     def as_conjugate(self):
