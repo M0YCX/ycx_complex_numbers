@@ -410,7 +410,7 @@ def test_ne(test_input1, test_input2):
 def test_as_polar_phase(test_input1):
     c = test_input1[0]
     ex = test_input1[1]
-    p = c.as_polar()
+    p = c.as_polar2()
     assert round(p["mag"], 6) == ex["mag"]
     assert round(p["angle"], 2) == ex["angle"]
 
@@ -432,7 +432,7 @@ def test_as_polar_phase(test_input1):
 def test_as_polar(test_input1):
     c = test_input1
     p = c.as_polar()
-    p2 = c.as_polar_orig()
+    p2 = c.as_polar()
     assert p["mag"] == 5.0
     assert p["angle"] == 53.13010235415598
     assert p2["mag"] == 5.0

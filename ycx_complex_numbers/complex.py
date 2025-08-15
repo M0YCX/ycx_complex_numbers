@@ -87,7 +87,8 @@ class Complex(object):
         return {"mag": mag, "angle": angle}
 
     def as_polar2(self):
-        """Return as polar magnitude and phase angle"""
+        """Return as polar magnitude and phase angle (as positive angles
+        counter-clockwise from 0 to 360 degrees)"""
         mag = abs(self._c)
         angle = math.degrees(math.atan2(abs(self._c.imag), abs(self._c.real)))
         q = self.quadrant()
