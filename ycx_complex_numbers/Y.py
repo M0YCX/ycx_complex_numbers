@@ -124,21 +124,6 @@ class NetY(Net):
         elif isinstance(Z0, tuple) or isinstance(Z0, list):
             Z01 = Complex(Z0[0])
             Z02 = Complex(Z0[1])
-        # Z01conj = Z01.conjugate
-        # Z02conj = Z02.conjugate
-
-        # ypi = self.y11 * Z0
-        # ypr = self.y12 * Z0
-        # ypf = self.y21 * Z0
-        # ypo = self.y22 * Z0
-        # return cn.NetS(
-        #     s11=((1 - ypi) * (1 + ypo) + ypr * ypf)
-        #     / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-        #     s12=(-2 * ypr) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-        #     s21=(-2 * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-        #     s22=((1 + ypi) * (1 - ypo) + ypr * ypf)
-        #     / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-        # )
 
         return cn.NetS(
             s11=(

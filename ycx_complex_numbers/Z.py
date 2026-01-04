@@ -1,3 +1,4 @@
+from math import sqrt
 from ycx_complex_numbers.complex import Complex, Net
 import ycx_complex_numbers as cn
 
@@ -18,11 +19,11 @@ class Z(Complex):
     def X(self):
         return self._c.imag
 
-    def vswr(self, Z0=50+0j):
+    def vswr(self, Z0=50 + 0j):
         gamma = (self - Z0) / (self + Z0)
         return round((1 + abs(gamma)) / (1 - abs(gamma)), 3)
 
-    def reflection_coefficient(self, Z0=50+0j):
+    def reflection_coefficient(self, Z0=50 + 0j):
         gamma = cn.ReflCoef((self - Z0) / (self + Z0))
         return gamma
 
@@ -97,16 +98,47 @@ class NetZ(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
-        """Convert to S parameters"""
-        zi = self.z11 / Z0
-        zr = self.z12 / Z0
-        zf = self.z21 / Z0
-        zo = self.z22 / Z0
+        """Convert this matrix of Z-Parameters to S-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
+        # zi = self.z11 / Z0
+        # zr = self.z12 / Z0
+        # zf = self.z21 / Z0
+        # zo = self.z22 / Z0
+        # return cn.NetS(
+        #     s11=((zi - 1) * (zo + 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+        #     s12=(2 * zr) / ((zi + 1) * (zo + 1) - zr * zf),
+        #     s21=(2 * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+        #     s22=((zi + 1) * (zo - 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+        # )
         return cn.NetS(
-            s11=((zi - 1) * (zo + 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
-            s12=(2 * zr) / ((zi + 1) * (zo + 1) - zr * zf),
-            s21=(2 * zf) / ((zi + 1) * (zo + 1) - zr * zf),
-            s22=((zi + 1) * (zo - 1) - zr * zf) / ((zi + 1) * (zo + 1) - zr * zf),
+            s11=((self.z11 - Z01.conjugate) * (self.z22 + Z02) - self.z12 * self.z21)
+            / ((self.z11 + Z01) * (self.z22 + Z02) - self.z12 * self.z21),
+            #
+            s12=(2 * self.z12 * sqrt(Z01.real * Z02.real))
+            / ((self.z11 + Z01) * (self.z22 + Z02) - self.z12 * self.z21),
+            #
+            s21=(2 * self.z21 * sqrt(Z01.real * Z02.real))
+            / ((self.z11 + Z01) * (self.z22 + Z02) - self.z12 * self.z21),
+            #
+            s22=((self.z11 + Z01) * (self.z22 - Z02.conjugate) - self.z12 * self.z21)
+            / ((self.z11 + Z01) * (self.z22 + Z02) - self.z12 * self.z21),
         )
 
     def zin(self, ZL=50 + 0j):
