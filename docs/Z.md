@@ -18,7 +18,7 @@ $$
 Where:
 * $Z_{01}$ is the complex normalised impedance of port 1 (e.g, $50+0j$),
 * $Z_{02}$ is the complex normalised impedance of port 2 (e.g, $50+0j$),
-* $Z^{*}_{01}$ is the complex __conjugate__ of $Z_{01}$
+* $Z_{01}^{*}$ is the complex __conjugate__ of $Z_{01}$
 * $Z^{*}_{02}$ is the complex __conjugate__ of $Z_{02}$
 * $R_{01}$ is the __real__ part of $Z_{01}$
 * $R_{02}$ is the __real__ part of $Z_{02}$
