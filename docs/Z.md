@@ -15,9 +15,7 @@ S_{22} &= \frac{(Z_{11}+Z_{01}) (Z_{22}-Z_{02}^{\ast}) - Z_{12} Z_{21}}{(Z_{11}+
 %
 \end{aligned}
 $$
-<!--
-S_{22} &= \frac{ ( Z_{11} + Z_{01} ) ( Z_{22} - Z_{02}^{*} ) - Z_{12} Z_{21} }{ ( Z_{11} + Z_{01} ) ( Z_{22} + Z_{02} ) - Z_{12} Z_{21} } \\
--->
+
 Where:
 * $Z_{01}$ is the complex normalised impedance of port 1 (e.g, $50+0j$),
 * $Z_{02}$ is the complex normalised impedance of port 2 (e.g, $50+0j$),
