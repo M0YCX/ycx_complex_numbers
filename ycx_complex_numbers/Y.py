@@ -1,3 +1,4 @@
+from math import sqrt
 from ycx_complex_numbers.complex import Complex, Net
 import ycx_complex_numbers as cn
 
@@ -18,8 +19,10 @@ class Y(Complex):
     def B(self):
         return self._c.imag
 
+
 class NetY(Net):
     """Y - Admittance 2-port-node parameters."""
+
     def __init__(self, y11=None, y12=None, y21=None, y22=None):
         super().__init__(c11=Y(y11), c12=Y(y12), c21=Y(y21), c22=Y(y22))
 
@@ -103,16 +106,64 @@ class NetY(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
-        """Convert to S parameters"""
-        ypi = self.y11 * Z0
-        ypr = self.y12 * Z0
-        ypf = self.y21 * Z0
-        ypo = self.y22 * Z0
+        """Convert this matrix of Y-Parameters to S-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+        # Z01conj = Z01.conjugate
+        # Z02conj = Z02.conjugate
+
+        # ypi = self.y11 * Z0
+        # ypr = self.y12 * Z0
+        # ypf = self.y21 * Z0
+        # ypo = self.y22 * Z0
+        # return cn.NetS(
+        #     s11=((1 - ypi) * (1 + ypo) + ypr * ypf)
+        #     / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+        #     s12=(-2 * ypr) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+        #     s21=(-2 * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+        #     s22=((1 + ypi) * (1 - ypo) + ypr * ypf)
+        #     / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+        # )
+
         return cn.NetS(
-            s11=((1 - ypi) * (1 + ypo) + ypr * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-            s12=(-2 * ypr) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-            s21=(-2 * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
-            s22=((1 + ypi) * (1 - ypo) + ypr * ypf) / ((1 + ypi) * (1 + ypo) - ypr * ypf),
+            s11=(
+                (1 - self.y11 * Z01.conjugate) * (1 + self.y22 * Z02)
+                + self.y12 * self.y21 * Z01.conjugate * Z02
+            )
+            / (
+                (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
+                - self.y12 * self.y21 * Z01 * Z02
+            ),
+            s12=(-2 * self.y12 * sqrt(Z01.real * Z02.real))
+            / (
+                (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
+                - self.y12 * self.y21 * Z01 * Z02
+            ),
+            s21=(-2 * self.y21 * sqrt(Z01.real * Z02.real))
+            / (
+                (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
+                - self.y12 * self.y21 * Z01 * Z02
+            ),
+            s22=(
+                (1 + self.y11 * Z01) * (1 - self.y22 * Z02.conjugate)
+                + self.y12 * self.y21 * Z01 * Z02.conjugate
+            )
+            / ((1 + self.y11*Z01) * (1 + self.y22*Z02) - self.y12 * self.y21*Z01*Z02),
         )
 
     def yin(self, YL=1 / (50 + 0j)):
@@ -137,7 +188,9 @@ class NetY(Net):
 
     @property
     def linvill_stability(self):
-        return abs(self.y21 * self.y12) / (2 * self.y11.real * self.y22.real - (self.y21 * self.y12).real)
+        return abs(self.y21 * self.y12) / (
+            2 * self.y11.real * self.y22.real - (self.y21 * self.y12).real
+        )
 
     #############################################
     # Amplifier Config Exchanges/Transformations
