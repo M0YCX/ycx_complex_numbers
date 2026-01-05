@@ -288,8 +288,8 @@ class TestNetConversions:
         assert zz.to_H().equals(h, precision=12)
         ss = h.to_S()
         assert isinstance(ss, NetS)
-        print(f"h={h}")
-        print(f"ss->h={ss.to_H()}")
+        # print(f"h={h}")
+        # print(f"ss->h={ss.to_H()}")
         assert ss.to_H().equals(h, precision=12)
 
         s = s1
