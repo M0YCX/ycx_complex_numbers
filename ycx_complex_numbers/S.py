@@ -1,5 +1,6 @@
 import math
 from math import sqrt
+
 # from mpmath import mp
 
 from ycx_complex_numbers.complex import Complex, Net
@@ -39,8 +40,7 @@ class NetS(Net):
         return self._c22
 
     def to_Y(self, Z0=50 + 0j):
-        """Convert to Y parameters"""
-        """Convert this matrix of S-Parameters to Y-Parameters.
+        """Convert this matrix to Y-Parameters.
         Parameters:
             - Z0: Normalised complex impedance. Can be specified as:
                 + a real value. e.g. 50
@@ -89,37 +89,124 @@ class NetS(Net):
         )
 
     def to_Z(self, Z0=50 + 0j):
-        """Convert to Z parameters"""
+        """Convert this matrix to Z-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
         d = (1 - self.s11) * (1 - self.s22) - self.s12 * self.s21
+
+        # return cn.NetZ(
+        #     z11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d * Z0,
+        #     z12=(2 * self.s12) / d * Z0,
+        #     z21=(2 * self.s21) / d * Z0,
+        #     z22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d * Z0,
+        # )
         return cn.NetZ(
-            z11=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d * Z0,
-            z12=(2 * self.s12) / d * Z0,
-            z21=(2 * self.s21) / d * Z0,
-            z22=((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d * Z0,
+            z11=(
+                (Z01.conjugate + self.s11 * Z01) * (1 - self.s22)
+                + self.s12 * self.s21 * Z01
+            )
+            / d,
+            z12=(2 * self.s12 * sqrt(Z01.real * Z02.real)) / d,
+            z21=(2 * self.s21 * sqrt(Z01.real * Z02.real)) / d,
+            z22=(
+                (1 - self.s11) * (Z02.conjugate + self.s22 * Z02)
+                + self.s12 * self.s21 * Z02
+            )
+            / d,
         )
 
     def to_a(self, Z0=50 + 0j):
-        """Convert to ABCD parameters"""
-        d = 2 * self.s21
-        Ap = ((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21) / d
-        Bp = ((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d
-        Cp = ((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d
-        Dp = ((1 - self.s11) * (1 + self.s22) + self.s12 * self.s21) / d
+        """Convert this matrix to ABCD-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
+        d = 2 * self.s21 * sqrt(Z01.real * Z02.real)
         return cn.Neta(
-            a11=Ap,
-            a12=Bp * Z0,
-            a21=Cp / Z0,
-            a22=Dp,
+            # A
+            a11=(
+                (Z01.conjugate + self.s11 * Z02) * (1 - self.s22)
+                + self.s12 * self.s21 * Z01
+            )
+            / d,
+            # B
+            a12=(
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            )
+            / d,
+            # C
+            a21=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d,
+            # D
+            a22=(
+                (1 - self.s11) * (Z02.conjugate + self.s22 * Z02)
+                + self.s12 * self.s21 * Z02
+            )
+            / d,
         )
 
     def to_H(self, Z0=50 + 0j):
-        """Convert to H parameters"""
-        d = (1 - self.s11) * (1 + self.s22) + self.s12 * self.s21
+        """Convert this matrix to H-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
+        d = (1 - self.s11) * (
+            Z02.conjugate + self.s22 * Z02
+        ) + self.s12 * self.s21 * Z02
         return cn.NetH(
-            h11=((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21) / d * Z0,
-            h12=(2 * self.s12) / d,
-            h21=(-2 * self.s21) / d,
-            h22=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d * (1 / Z0),
+            h11=(
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            )
+            / d,
+            h12=(2 * self.s12 * sqrt(Z01.real * Z02.real)) / d,
+            h21=(-2 * self.s21 * sqrt(Z01.real * Z02.real)) / d,
+            h22=((1 - self.s11) * (1 - self.s22) - self.s12 * self.s21) / d,
         )
 
     def reflcoefin(self, ReflcoefL=cn.ReflCoef(0 + 0j)):

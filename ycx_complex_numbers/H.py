@@ -1,3 +1,4 @@
+from math import sqrt
 from ycx_complex_numbers.complex import Complex, Net
 import ycx_complex_numbers as cn
 
@@ -13,6 +14,7 @@ class H(Complex):
 
 class NetH(Net):
     """H - (hybrid) 2-port-node parameters."""
+
     def __init__(self, h11=None, h12=None, h21=None, h22=None):
         super().__init__(c11=H(h11), c12=H(h12), c21=H(h21), c22=H(h22))
 
@@ -80,15 +82,37 @@ class NetH(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
-        """Convert to S parameters"""
-        hi = self.h11 / Z0
-        hr = self.h12
-        hf = self.h21
-        ho = self.h22 * Z0
-        d = (hi + 1) * (ho + 1) - hr * hf
+        """Convert this matrix to S-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
+        d = (Z01 + self.h11) * (1 + self.h22 * Z02) - self.h12 * self.h21 * Z02
         return cn.NetS(
-            s11=((hi - 1) * (ho + 1) - hr * hf) / d,
-            s12=(2 * hr) / d,
-            s21=(-2 * hf) / d,
-            s22=((1 + hi) * (1 - ho) + hr * hf) / d,
+            s11=(
+                (self.h11 - Z01.conjugate) * (1 + self.h22 * Z02)
+                - self.h12 * self.h21 * Z02
+            )
+            / d,
+            s12=(2 * self.h12 * sqrt(Z01.real * Z02.real)) / d,
+            s21=(-2 * self.h21 * sqrt(Z01.real * Z02.real)) / d,
+            s22=(
+                (Z01 + self.h11) * (1 - self.h22 * Z02.conjugate)
+                + self.h12 * self.h21 * Z02.conjugate
+            )
+            / d,
         )

@@ -1,3 +1,4 @@
+from math import sqrt
 from ycx_complex_numbers.complex import Complex, Net
 import ycx_complex_numbers as cn
 
@@ -13,6 +14,7 @@ class a(Complex):
 
 class Neta(Net):
     """ABCD - An ABCD (fwd Chain/Cascade/Transmission) 2-port-node parameters."""
+
     def __init__(self, a11=None, a12=None, a21=None, a22=None):
         super().__init__(c11=a(a11), c12=a(a12), c21=a(a21), c22=a(a22))
 
@@ -93,15 +95,42 @@ class Neta(Net):
         )
 
     def to_S(self, Z0=50 + 0j):
-        """Convert to S parameters"""
-        Ap = self.A
-        Bp = self.B / Z0
-        Cp = self.C * Z0
-        Dp = self.D
-        d = Ap + Bp + Cp + Dp
+        """Convert this matrix to S-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
         return cn.NetS(
-            s11=(Ap + Bp - Cp - Dp) / d,
-            s12=(2 * (Ap * Dp - Bp * Cp)) / d,
-            s21=2 / d,
-            s22=(-Ap + Bp - Cp + Dp) / d,
+            s11=(
+                self.A * Z02
+                + self.B
+                - self.C * Z01.conjugate * Z02
+                - self.D * Z01.conjugate
+            )
+            / (self.A * Z02 + self.B + self.C * Z01 * Z02 + self.D * Z01),
+            s12=(2 * (self.A * self.D - self.B * self.C) * sqrt(Z01.real * Z02.real))
+            / (self.A * Z02 + self.B + self.C * Z01 * Z02 + self.D * Z01),
+            s21=(2 * sqrt(Z01.real * Z02.real))
+            / (self.A * Z02 + self.B + self.C * Z01 * Z02 + self.D * Z01),
+            s22=(
+                -self.A * Z02.conjugate
+                + self.B
+                - self.C * Z01 * Z02.conjugate
+                + self.D * Z01
+            )
+            / (self.A * Z02 + self.B + self.C * Z01 * Z02 + self.D * Z01),
         )
