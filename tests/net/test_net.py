@@ -208,7 +208,16 @@ class TestNetConversions:
         assert h1.to_Y().equals(y, precision=16)
         s1 = y.to_S()
         assert isinstance(s1, NetS)
-        assert s1.to_Y().equals(y, precision=6)
+        # ydeb = s1.to_Y()
+        # print(f"y repr: {repr(y)}")
+        # print(f"ydeb repr: {repr(ydeb)}")
+        # sdeb = ydeb.to_S()
+        # print(f"s1 repr: {repr(s1)}")
+        # print(f"sdeb repr: {repr(sdeb)}")
+        # print(f"diff y: {(y-ydeb):.20}")
+        # print(f"diff s: {(s1-sdeb):.20f}")
+
+        assert s1.to_Y().equals(y, precision=15) # was 6
 
         z = z1
         aa1 = z.to_a()
@@ -289,7 +298,9 @@ class TestNetConversions:
         # assert ab1.to_S().equals(s, precision=10)
         yy = s.to_Y()
         assert isinstance(yy, NetY)
-        assert yy.to_S().equals(s, precision=4)
+        # print("s", s)
+        # print("yy->s", yy.to_S())
+        assert yy.to_S().equals(s, precision=4) # was 4
         zz = s.to_Z()
         assert isinstance(zz, NetZ)
         assert zz.to_S().equals(s, precision=12)

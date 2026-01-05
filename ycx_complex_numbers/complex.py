@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import cmath
+from mpmath import mp
 from warnings import warn
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
@@ -17,9 +18,9 @@ class Complex(object):
         elif isinstance(c, Complex):
             self._c = c._c
         elif isinstance(c, complex):
-            self._c = c
+            self._c = mp.mpc(c)
         else:
-            self._c = c + 0j
+            self._c = mp.mpc(c + 0j)
 
     def from_polar(self, mag, angle):
         """Create a Complex instance from a polar coordinate using magnitude and phase angle"""
@@ -39,11 +40,12 @@ class Complex(object):
             fmt = ".5f"
 
         p = self.as_polar()
+        # print(type(self.c), self.c, fmt)
         return (
             f"{self._symbol+':' if self._symbol else ''}"
-            + format(self._c, fmt)
+            + format(complex(self._c), fmt)
             + f" :{linesep}[mag:"
-            + format(p["mag"], fmt)
+            + format(float(p["mag"]), fmt)
             + " ∠"
             + format(p["angle"], fmt)
             + "]"
@@ -65,7 +67,7 @@ class Complex(object):
 
     def as_complex(self):
         """Return Complex as a pure python complex number"""
-        return self._c
+        return complex(self._c)
 
     def quadrant(self):
         """Return which quadrant of the graph the complex number is in (1-4)"""
@@ -208,7 +210,17 @@ class Net(object):
         return self._to_str()
 
     def __repr__(self):
-        return str(self)
+        # return str(self)
+        return (
+            "<{0}.{1} object at {2}>".format(
+                type(self).__module__, type(self).__qualname__, hex(id(self))
+            )
+            + "\n"
+            + f"  .c11:{type(self.c11)}.c:{type(self.c11.c)}\n"
+            + f"  .c12:{type(self.c12)}.c:{type(self.c12.c)}\n"
+            + f"  .c21:{type(self.c21)}.c:{type(self.c21.c)}\n"
+            + f"  .c22:{type(self.c22)}.c:{type(self.c22.c)}"
+        )
 
     def __format__(self, fmt):
         return self._to_str(fmt=fmt)

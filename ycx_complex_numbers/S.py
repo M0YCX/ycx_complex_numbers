@@ -1,4 +1,6 @@
 import math
+# from math import sqrt
+from mpmath import mp
 
 from ycx_complex_numbers.complex import Complex, Net
 from ycx_complex_numbers.Y import NetY
@@ -38,19 +40,52 @@ class NetS(Net):
 
     def to_Y(self, Z0=50 + 0j):
         """Convert to Y parameters"""
+        """Convert this matrix of S-Parameters to Y-Parameters.
+        Parameters:
+            - Z0: Normalised complex impedance. Can be specified as:
+                + a real value. e.g. 50
+                + a complex value, e.g. 50+0j
+                + a 2-element array of real or complex values, representing the
+                normalised impedances of each ports' termination (aka ZS and
+                ZL respectively)
+        """
+        Z01 = Complex(50 + 0j)
+        Z02 = Complex(50 + 0j)
+
+        if isinstance(Z0, int) or isinstance(Z0, complex):
+            Z01 = Complex(Z0)
+            Z02 = Complex(Z0)
+        elif isinstance(Z0, tuple) or isinstance(Z0, list):
+            Z01 = Complex(Z0[0])
+            Z02 = Complex(Z0[1])
+
         return NetY(
-            y11=((1 + self.s22) * (1 - self.s11) + self.s12 * self.s21)
-            / ((1 + self.s11) * (1 + self.s22) + self.s12 * self.s21)
-            * (1 / Z0),
-            y12=(-2 * self.s12)
-            / ((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21)
-            * (1 / Z0),
-            y21=(-2 * self.s21)
-            / ((1 + self.s11) * (1 + self.s22) - self.s12 * self.s21)
-            * (1 / Z0),
-            y22=((1 + self.s11) * (1 - self.s22) + self.s12 * self.s21)
-            / ((1 + self.s22) * (1 + self.s11) - self.s12 * self.s21)
-            * (1 / Z0),
+            y11=(
+                (1 - self.s11) * (Z02.conjugate + self.s22 * Z02)
+                + self.s12 * self.s21 * Z02
+            )
+            / (
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            ),
+            y12=(-2 * self.s12 * mp.sqrt(Z01.real * Z02.real))
+            / (
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            ),
+            y21=(-2 * self.s21 * mp.sqrt(Z01.real * Z02.real))
+            / (
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            ),
+            y22=(
+                (Z01.conjugate + self.s11 * Z01) * (1 - self.s22)
+                + self.s12 * self.s21 * Z01
+            )
+            / (
+                (Z01.conjugate + self.s11 * Z01) * (Z02.conjugate + self.s22 * Z02)
+                - self.s12 * self.s21 * Z01 * Z02
+            ),
         )
 
     def to_Z(self, Z0=50 + 0j):
