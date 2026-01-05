@@ -126,8 +126,6 @@ class NetY(Net):
             Z01 = Complex(Z0[0])
             Z02 = Complex(Z0[1])
 
-        print(f"Z01.conjugate={Z01.conjugate}")
-
         return cn.NetS(
             s11=(
                 (1 - self.y11 * Z01.conjugate) * (1 + self.y22 * Z02)
