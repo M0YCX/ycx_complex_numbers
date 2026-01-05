@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import cmath
-from mpmath import mp
+# from mpmath import mp
 from warnings import warn
 
 # WARNING: file contains utf-8 unicode chars, e.g. ∠
@@ -18,9 +18,11 @@ class Complex(object):
         elif isinstance(c, Complex):
             self._c = c._c
         elif isinstance(c, complex):
-            self._c = mp.mpc(c)
+            # self._c = mp.mpc(c)
+            self._c = c
         else:
-            self._c = mp.mpc(c + 0j)
+            # self._c = mp.mpc(c + 0j)
+            self._c = c + 0j
 
     def from_polar(self, mag, angle):
         """Create a Complex instance from a polar coordinate using magnitude and phase angle"""

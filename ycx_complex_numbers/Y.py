@@ -1,5 +1,5 @@
-# from math import sqrt
-from mpmath import mp
+from math import sqrt
+# from mpmath import mp
 from ycx_complex_numbers.complex import Complex, Net
 import ycx_complex_numbers as cn
 
@@ -137,12 +137,12 @@ class NetY(Net):
                 (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
                 - self.y12 * self.y21 * Z01 * Z02
             ),
-            s12=(-2 * self.y12 * mp.sqrt(Z01.real * Z02.real))
+            s12=(-2 * self.y12 * sqrt(Z01.real * Z02.real))
             / (
                 (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
                 - self.y12 * self.y21 * Z01 * Z02
             ),
-            s21=(-2 * self.y21 * mp.sqrt(Z01.real * Z02.real))
+            s21=(-2 * self.y21 * sqrt(Z01.real * Z02.real))
             / (
                 (1 + self.y11 * Z01) * (1 + self.y22 * Z02)
                 - self.y12 * self.y21 * Z01 * Z02
